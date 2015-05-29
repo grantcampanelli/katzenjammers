@@ -58,7 +58,7 @@ public class Main {
         public String country;
 
         public Address(Integer source_id, String type, String street, String unit, String city,
-                       String region, String zip_code, String county, String country;) {
+                       String region, String zip_code, String county, String country) {
 
             this.source_id =  source_id;
             this.type = type;
@@ -70,23 +70,22 @@ public class Main {
             this.county = county;
             this.country = country;
         }
-
-
     }
 
-//    public void initArrayNull() {
-//
-//    }
+
 
     public static void main(String[] args) {
-        //System.out.println("Hello World!");
+          readInFromDatabase();
+    }
+
+    public static void readInFromDatabase() {
         Connection conn = null;
         Statement stmt = null;
         String type, name, gender, phone, street, unit,
                 city, region, zip_code, county, country, is_sole_proprieter, primary,
                 title, code, website;
         Date dob;
-        Integer source_id, parentId, specialtyId, primarySpecialty, secondarySpecialty;
+        Integer source_id, parentId, specialtyId, primarySpecialty = null, secondarySpecialty = null;
         Integer numTuplesSpecialties = 0, numTuplesSource = 0, numTuplesAddress = 0, index = 0;
 
 
@@ -113,46 +112,60 @@ public class Main {
             while(rs.next()) {
 
                 // read in values to variables
-                parentId = rs.getInt("parent_id");
-                specialtyId = rs.getInt("specialty_id");
+                // reading in null with getInt makes it 0, which is not good
+                if(rs.getString("parent_id") == null)
+                    parentId = null;
+                else
+                    parentId = rs.getInt("parent_id");
+
+                // fix for getInt on null = 0
+                if(rs.getString("specialty_id") == null)
+                    specialtyId  = null;
+                else
+                    specialtyId = rs.getInt("specialty_id");
+
                 title = rs.getString("title");
                 code = rs.getString("code");
                 website = rs.getString("website");
-
-//                specialties[index].parentId = rs.getInt("parent_id");
-//                specialties[index].specialtyId = rs.getInt("specialty_id");
-//                specialties[index].title = rs.getString("title");
-//                specialties[index].code = rs.getString("code");
-//                specialties[index].website = rs.getString("website");
 
                 // create new object in the array
                 specialties[index] = new Specialties(parentId, specialtyId, title,
                         code, website);
 
 
+                /*
                 // print out specialties
                 System.out.println("ParentId: "+specialties[index].parentId+" Id: "+
                         specialties[index].specialtyId+" Title: "+specialties[index].title+
                         " Code: "+specialties[index].code+" Website: "+
                         specialties[index].website);
+                */
                 index++;
             }
+
             System.out.println("Done reading Specialties");
-
-
             System.out.println("Querying each line from Source...");
+
+
+            // Set to query from Source
             sql = "SELECT * FROM Source";
             rs = stmt.executeQuery(sql);
+
+            // Get number of tuples
             while(rs.next()) {
                 numTuplesSource++;
             }
+
             System.out.println("Num Sources: "+ numTuplesSource);
 
+            // initialize source array
             Source[] source = new Source[numTuplesSource];
 
+            // Start reading in Source
             rs = stmt.executeQuery(sql);
             index = 0;
             while(rs.next()) {
+                // read in source to variables
                 source_id = rs.getInt("source_id");
                 type = rs.getString("type");
                 name = rs.getString("name");
@@ -160,31 +173,59 @@ public class Main {
                 dob = rs.getDate("dob");
                 is_sole_proprieter = rs.getString("is_sole_proprieter");
                 phone = rs.getString("phone");
-                primarySpecialty = rs.getInt("primary_specialty");
-                secondarySpecialty  = rs.getInt("secondary_specialty");
 
+                // fix for getInt on null = 0
+                if(rs.getString("primary_specialty") == null)
+                    primarySpecialty = null;
+                else
+                    primarySpecialty = rs.getInt("primary_specialty");
+
+                // fix for getInt on null = 0
+                if(rs.getString("secondary_specialty") == null)
+                    secondarySpecialty = null;
+                else
+                    secondarySpecialty  = rs.getInt("secondary_specialty");
+
+                // create new source object and add to array
                 source[index] = new Source(source_id, type, name, gender, dob, is_sole_proprieter,
                         phone, primarySpecialty, secondarySpecialty);
-                //System.out.println(primary);
 
-                //System.out.println("SourceID: "+source_id+" Type: "+type+" Name: "+name+" Gender: "
-                //        +gender+" DOB: "+dob+" SolePro: "+is_sole_proprieter);
+                /*
+                //Print out source array
+                System.out.println("source_id: "+source[index].id+" type: "+source[index].type+" name: "+
+                        source[index].name+" gender: "+source[index].gender+" dob: "+source[index].dob+
+                        " solProprieter: "+source[index].solProp+" phone: "+source[index].phone+
+                        " primarySpecialty: "+source[index].primarySpecialty+" secondarySpecialty: "+
+                        source[index].secondarySpecialty);
+                 */
             }
-            System.out.println("Done reading Source");
 
+            System.out.println("Done reading Source");
             System.out.println("Querying each line from Address...");
 
+            // set querty for Address
             sql = "SELECT * FROM Address";
             rs = stmt.executeQuery(sql);
 
+            // get num tuples
             while(rs.next()) {
                 numTuplesAddress++;
             }
             System.out.println("Num Addresses: "+ numTuplesAddress);
 
+            // initialize addresses array
+            Address[] addresses = new Address[numTuplesAddress];
+
+            // read in addresses
             rs = stmt.executeQuery(sql);
+            index = 0;
             while(rs.next()){
-                source_id = rs.getInt("source_id");
+                // fix for getInt on null = 0
+                if(rs.getString("source_id") == null)
+                    source_id = null;
+                else
+                    source_id  = rs.getInt("source_id");
+
                 type = rs.getString("type");
                 street = rs.getString("street");
                 unit = rs.getString("unit");
@@ -194,9 +235,17 @@ public class Main {
                 county = rs.getString("county");
                 country = rs.getString("country");
 
-                //System.out.println("ID: "+source_id+" Type: "+type+" Street: "+street+" Unit: "+unit+
-                //        " City: "+city+" Region: "+region+" Zip: "+zip_code+
-                //        " County: "+county+" Country: "+country);
+                addresses[index] = new Address(source_id, type, street, unit, city, region, zip_code, county, country);
+
+                /*
+                // print out address array
+                System.out.println("source_id: "+addresses[index].source_id+" type: "+addresses[index].type+
+                        " street: "+addresses[index].street+" unit: "+addresses[index].unit+" city: "+
+                        addresses[index].city+" region: "+addresses[index].region+" zip_code: "+
+                        addresses[index].zip_code+" county: "+addresses[index].county+
+                        " country: "+addresses[index].country);
+                */
+                index++;
             }
             System.out.print("Done reading Address");
 
@@ -223,5 +272,11 @@ public class Main {
                 se.printStackTrace();
             }//end finally try
         }//end try
+
+        // Arrays:
+        //    specialties[]
+        //    source[]
+        //    addresses[]
+
     }
 }
