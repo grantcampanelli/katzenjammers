@@ -1,9 +1,13 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import model.*;
 
-public class Main {
+public class Main
+{
 
-    public static class Source {
+    /*public static class Source {
         public Integer id;
         public String type;
         public String name;
@@ -70,57 +74,62 @@ public class Main {
             this.county = county;
             this.country = country;
         }
+    }*/
+
+
+    public static void main(String[] args)
+    {
+        readInFromDatabase();
     }
 
-
-
-    public static void main(String[] args) {
-          readInFromDatabase();
-    }
-
-    public static void readInFromDatabase() {
+    public static List<Source> readInFromDatabase()
+    {
         Connection conn = null;
         Statement stmt = null;
         String type, name, gender, phone, street, unit,
-                city, region, zip_code, county, country, is_sole_proprieter, primary,
-                title, code, website;
+            city, region, zip_code, county, country, is_sole_proprieter, primary,
+            title, code, website;
         Date dob;
         Integer source_id, parentId, specialtyId, primarySpecialty = null, secondarySpecialty = null;
         Integer numTuplesSpecialties = 0, numTuplesSource = 0, numTuplesAddress = 0, index = 0;
 
 
-        try {
+        try
+        {
 
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Katzenjammers","grant","Soccer57");
+            conn = DriverManager.getConnection
+                ("jdbc:mysql://localhost:3306/katjzenjammers", "grant", "Soccer57");
             stmt = conn.createStatement();
             String sql;
             System.out.println("Querying each line from Specialties...");
             sql = "SELECT * FROM Specialties";
             ResultSet rs = stmt.executeQuery(sql);
 
-            while(rs.next()) {
+            while (rs.next())
+            {
                 numTuplesSpecialties++;
             }
-            System.out.print("Num Specialties: " + numTuplesSpecialties+"\n");
+            System.out.print("Num Specialties: " + numTuplesSpecialties + "\n");
 
             Specialties[] specialties = new Specialties[numTuplesSpecialties];
 
 
             rs = stmt.executeQuery(sql);
 
-            while(rs.next()) {
+            while (rs.next())
+            {
 
                 // read in values to variables
                 // reading in null with getInt makes it 0, which is not good
-                if(rs.getString("parent_id") == null)
+                if (rs.getString("parent_id") == null)
                     parentId = null;
                 else
                     parentId = rs.getInt("parent_id");
 
                 // fix for getInt on null = 0
-                if(rs.getString("specialty_id") == null)
-                    specialtyId  = null;
+                if (rs.getString("specialty_id") == null)
+                    specialtyId = null;
                 else
                     specialtyId = rs.getInt("specialty_id");
 
@@ -130,7 +139,7 @@ public class Main {
 
                 // create new object in the array
                 specialties[index] = new Specialties(parentId, specialtyId, title,
-                        code, website);
+                    code, website);
 
 
                 /*
@@ -152,19 +161,22 @@ public class Main {
             rs = stmt.executeQuery(sql);
 
             // Get number of tuples
-            while(rs.next()) {
+            while (rs.next())
+            {
                 numTuplesSource++;
             }
 
-            System.out.println("Num Sources: "+ numTuplesSource);
+            System.out.println("Num Sources: " + numTuplesSource);
 
             // initialize source array
-            Source[] source = new Source[numTuplesSource];
+            //Source[] source = new Source[numTuplesSource];
+            List<Source> source= new ArrayList<Source>();
 
             // Start reading in Source
             rs = stmt.executeQuery(sql);
             index = 0;
-            while(rs.next()) {
+            while (rs.next())
+            {
                 // read in source to variables
                 source_id = rs.getInt("source_id");
                 type = rs.getString("type");
@@ -175,20 +187,22 @@ public class Main {
                 phone = rs.getString("phone");
 
                 // fix for getInt on null = 0
-                if(rs.getString("primary_specialty") == null)
+                if (rs.getString("primary_specialty") == null)
                     primarySpecialty = null;
                 else
                     primarySpecialty = rs.getInt("primary_specialty");
 
                 // fix for getInt on null = 0
-                if(rs.getString("secondary_specialty") == null)
+                if (rs.getString("secondary_specialty") == null)
                     secondarySpecialty = null;
                 else
-                    secondarySpecialty  = rs.getInt("secondary_specialty");
+                    secondarySpecialty = rs.getInt("secondary_specialty");
 
                 // create new source object and add to array
-                source[index] = new Source(source_id, type, name, gender, dob, is_sole_proprieter,
-                        phone, primarySpecialty, secondarySpecialty);
+                //source[index]
+                source.add(new Source(source_id, type, name, gender, dob,
+                            is_sole_proprieter,
+                            phone, primarySpecialty, secondarySpecialty));
 
                 /*
                 //Print out source array
@@ -208,10 +222,11 @@ public class Main {
             rs = stmt.executeQuery(sql);
 
             // get num tuples
-            while(rs.next()) {
+            while (rs.next())
+            {
                 numTuplesAddress++;
             }
-            System.out.println("Num Addresses: "+ numTuplesAddress);
+            System.out.println("Num Addresses: " + numTuplesAddress);
 
             // initialize addresses array
             Address[] addresses = new Address[numTuplesAddress];
@@ -219,12 +234,13 @@ public class Main {
             // read in addresses
             rs = stmt.executeQuery(sql);
             index = 0;
-            while(rs.next()){
+            while (rs.next())
+            {
                 // fix for getInt on null = 0
-                if(rs.getString("source_id") == null)
+                if (rs.getString("source_id") == null)
                     source_id = null;
                 else
-                    source_id  = rs.getInt("source_id");
+                    source_id = rs.getInt("source_id");
 
                 type = rs.getString("type");
                 street = rs.getString("street");
@@ -252,23 +268,35 @@ public class Main {
             rs.close();
             stmt.close();
             conn.close();
-        }catch(SQLException se){
+            return source;
+        }
+        catch (SQLException se)
+        {
             //Handle errors for JDBC
             se.printStackTrace();
-        }catch(Exception e){
+        }
+        catch (Exception e)
+        {
             //Handle errors for Class.forName
             e.printStackTrace();
-        }finally{
+        } finally
+        {
             //finally block used to close resources
-            try{
-                if(stmt!=null)
+            try
+            {
+                if (stmt != null)
                     stmt.close();
-            }catch(SQLException se2){
+            }
+            catch (SQLException se2)
+            {
             }// nothing we can do
-            try{
-                if(conn!=null)
+            try
+            {
+                if (conn != null)
                     conn.close();
-            }catch(SQLException se){
+            }
+            catch (SQLException se)
+            {
                 se.printStackTrace();
             }//end finally try
         }//end try
@@ -277,6 +305,6 @@ public class Main {
         //    specialties[]
         //    source[]
         //    addresses[]
-
+        return null;
     }
 }
