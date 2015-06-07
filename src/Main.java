@@ -99,7 +99,7 @@ public class Main
 
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection
-                ("jdbc:mysql://localhost:3306/katjzenjammers", "grant", "Soccer57");
+                ("jdbc:mysql://localhost:3306/katzenjammers", "grant", "Soccer57");
             stmt = conn.createStatement();
             String sql;
             System.out.println("Querying each line from Specialties...");
