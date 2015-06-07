@@ -17,7 +17,7 @@ public class Source
     public Integer primarySpecialty;
     public Integer secondarySpecialty;
     public Address mailingAddress;
-    public Address practicingAddress;
+    public Address practiceAddress;
 
     public Source(Integer id, String type, String name, String gender,
                   Date dob, String solProp, String phone, Integer primarySpecialty,
