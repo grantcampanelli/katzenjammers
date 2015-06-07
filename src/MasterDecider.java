@@ -36,7 +36,7 @@ public class MasterDecider
             if (names.length > 2 && names[2] != null && names[2].length() >
                 maxFirstLength) {
                 maxLastLength = names[2].length();
-                bestLast = names[2]
+                bestLast = names[2];
             }
 
             if (s.solProp.equals("Y")) {
@@ -56,4 +56,5 @@ public class MasterDecider
 
     }
 
+    return;
 }
