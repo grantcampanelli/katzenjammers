@@ -236,7 +236,7 @@ public class JDBCDeserialize {
 
     public static void printAddressesToFile(Address[] addresses, Integer numTuplesAddress) {
 
-        File AddressFile = new File("FullTest/Mac_Mini_Addresses_Katzenjammers.txt");
+        File AddressFile = new File("FullTest/Addresses_Katzenjammers.txt");
         FileWriter addressWriter;
         try {
             addressWriter = new FileWriter(AddressFile, false);
