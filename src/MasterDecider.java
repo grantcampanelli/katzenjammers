@@ -17,7 +17,7 @@ public class MasterDecider
         Map<String, Integer> credentialMap = new HashMap <String, Integer>();
         Map<String, Integer> phoneMap = new HashMap <String, Integer>();
 
-        String bestFirst, bestMiddle, bestLast;
+        String bestFirst = "", bestMiddle = "", bestLast = "";
         int maxFirstLength = 0, maxMiddleLength = 0, maxLastLength = 0;
         String isSoleProprieter = "";
 
@@ -36,24 +36,39 @@ public class MasterDecider
             if (names.length > 2 && names[2] != null && names[2].length() >
                 maxFirstLength) {
                 maxLastLength = names[2].length();
-                bestLast = names[2]
+                bestLast = names[2];
             }
 
             if (s.solProp.equals("Y")) {
                 isSoleProprieter = "Y";
             }
-            else if (s.solProp.equals("N")) {
+            else if (s.solProp.equals("N"))
+            {
                 isSoleProprieter = "N";
             }
-
-            //if ()
-
         }
         if (isSoleProprieter.equals("")) {
             isSoleProprieter = "X";
         }
+        Master m = new Master();
+        //currently returning a dummy master (partially correct).  Will need to fix this
+        //these are the only fields correct for now
+        m.dob = null;
+        m.id = masterId;
+        m.isSole = isSoleProprieter;
+        m.firstName = bestFirst;
+        m.middleName = bestMiddle;
+        m.lastName = bestLast;
 
+        m.gender = "M"; //all male for now
+        m.credential = "MD"; ///all md for now
+        m.phone = "1111111111";
+        m.prefix = "Mr.";
+        m.suffix = null;
+        m.primarySpec = null;
+        m.secondarySpec = null;
+        m.type = "IND"; //all ind for now. obviously need to change
 
+        return m;
     }
-
 }

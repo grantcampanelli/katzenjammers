@@ -1,3 +1,4 @@
+import model.Master;
 import model.Source;
 
 import java.util.*;
@@ -12,6 +13,14 @@ public class MatchKeeper
     private Map<Integer, Integer> map = new HashMap<Integer, Integer>();
     private Map<Integer, Set<Source>> listMap = new HashMap<Integer, Set<Source>>();
 
+    /**
+     * Saves a match.  Associates each source with a master ID,
+     * and also associates each masterId with a set of sources (same data,
+     * different views on it)
+     * @param source1
+     * @param source2
+     * @param why
+     */
     public void commit(Source source1, Source source2, Rule why) {
         Integer masterId;
         if (map.get(source1.id) != null) {
@@ -35,5 +44,17 @@ public class MatchKeeper
         }
         listMap.get(masterId).add(source1);
         listMap.get(masterId).add(source2);
+    }
+
+    /**
+     * Grant needs to call this method, then create insert table statements and shit.
+     * @return
+     */
+    public List<Master> getMasters() {
+        return null;
+    }
+
+    public Map<Integer, Integer> getCrossWalkMap() {
+        return map;
     }
 }

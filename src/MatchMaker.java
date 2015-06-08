@@ -11,8 +11,6 @@ import java.util.List;
  */
 public class MatchMaker
 {
-
-
     public static void main(String[] args) {
         List<Rule> rules = RuleParser.parseRules("rules.ini");
         //you can see the parsing is working
