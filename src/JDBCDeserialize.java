@@ -30,7 +30,7 @@ public class JDBCDeserialize {
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Katzenjammers", "grant", "Soccer57");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Katzenjammers", "cpe366", "Soccer57");
             stmt = conn.createStatement();
             String sql;
             ResultSet rs;
