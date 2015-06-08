@@ -67,13 +67,14 @@ public class MatchMaker
 
 
 
-        File file = new File("outputGrant");
-        FileWriter writer;
+        File MastersFile = new File("Masters_Katzenjammers.txt");
+        File CrosswalkFile = new File("Crosswalk_Katzenjammers.txt");
+        FileWriter mastersWriter, crosswalkWriter;
         try {
-            writer = new FileWriter(file, false);
-            PrintWriter pw = new PrintWriter(writer);
+            mastersWriter = new FileWriter(MastersFile, false);
+            PrintWriter pw = new PrintWriter(mastersWriter);
 
-            printColumns(pw);
+            printMastersColumns(pw);
 
             for(Master m : masterList) {
                 printIntegerItem(pw, m.id, "\t");
@@ -108,6 +109,23 @@ public class MatchMaker
             }
             pw.close();
 
+            crosswalkWriter = new FileWriter(CrosswalkFile, false);
+            pw = new PrintWriter(crosswalkWriter);
+
+            printCrosswalkColumns(pw);
+
+            Integer source_id, master_id;
+
+            for (Map.Entry<Integer, Integer> entry : crosswalk.entrySet()) {
+                source_id = entry.getKey();
+                master_id = entry.getValue();
+                printCrosswalkLine(pw, master_id, source_id);
+                // use key and value
+            }
+
+            pw.close();
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,7 +138,7 @@ public class MatchMaker
         }
     }
 
-    public static void printColumns(PrintWriter pw) {
+    public static void printMastersColumns(PrintWriter pw) {
         pw.print("Master Id\t");
         pw.print("Provider Type\t");
         pw.print("Name Prefix\t");
@@ -136,6 +154,13 @@ public class MatchMaker
         pw.print("Primary Specialty\t");
         pw.print("Secondary Specialty\n");
     }
+
+
+    public static void printCrosswalkColumns(PrintWriter pw) {
+        pw.print("Master Id\t");
+        pw.print("Source Identifier\n");
+    }
+
 
     public static void printIntegerItem(PrintWriter pw, Integer item, String delimiter) {
         if(item == null)
@@ -164,6 +189,11 @@ public class MatchMaker
             System.out.print("NULL"+delimiter);
         else
             System.out.print(item + delimiter);
+    }
+
+    public static void printCrosswalkLine(PrintWriter pw, Integer master_id, Integer source_id) {
+        if(master_id != null && source_id != null)
+            pw.print(master_id + "\t" + source_id + "\n");
     }
 
 
