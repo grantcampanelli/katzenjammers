@@ -60,8 +60,6 @@ public class Main
 
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Katzenjammers", "grant", "Soccer57");
-            //conn = DriverManager.getConnection("jdbc:mysql://unix3.csc.calpoly" +
-            //    ".edu/mifierro", "grant", "Soccer57");
             stmt = conn.createStatement();
             String sql;
             ResultSet rs;

@@ -2,6 +2,7 @@ import matcher.NameMatcher;
 import matcher.PhoneMatcher;
 import model.Score;
 import model.Source;
+import model.Specialties;
 
 import java.io.File;
 import java.util.List;
@@ -34,6 +35,7 @@ public class MatchMaker
                         (curSource), sources.get(toCompare));
                     score.phoneScore = PhoneMatcher.getInstance().match(sources.get
                         (curSource), sources.get(toCompare));
+                    
 
                     //run each rule
                     for (Rule rule : rules)
