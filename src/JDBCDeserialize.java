@@ -18,7 +18,9 @@ public class JDBCDeserialize {
 //    }
 
     // !!! SET NUM SOURCES HERE! !!!
-    public static Integer NumSources = 2000;
+    public static Integer NumSources = 5000;
+
+
     public static String OutputDirectory = "TestOutput/" + Integer.toString(NumSources) + "_";
     public static String getOutputDirectory() {
         return OutputDirectory;
