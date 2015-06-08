@@ -7,78 +7,9 @@ import model.*;
 public class Main
 {
 
-    /*public static class Source {
-        public Integer id;
-        public String type;
-        public String name;
-        public String gender;
-        public Date dob;
-        public String solProp;
-        public String phone;
-        public Integer primarySpecialty;
-        public Integer secondarySpecialty;
-
-        public Source(Integer id, String type, String name, String gender,
-                      Date dob, String solProp, String phone, Integer primarySpecialty,
-                      Integer secondarySpecialty) {
-            this.id = id;
-            this.type = type;
-            this.name = name;
-            this.gender = gender;
-            this.dob = dob;
-            this.solProp = solProp;
-            this.phone = phone;
-            this.primarySpecialty =  primarySpecialty;
-            this.secondarySpecialty = secondarySpecialty;
-        }
-    }
-
-    public static class Specialties {
-        public Integer parentId;
-        public Integer specialtyId;
-        public String title;
-        public String code;
-        public String website;
-
-        public Specialties(Integer parentId, Integer specialtyId, String title,
-                            String code, String website) {
-            this.parentId = parentId;
-            this.specialtyId = specialtyId;
-            this.title = title;
-            this.code = code;
-            this.website = website;
-        }
-    }
-
-    public static class Address {
-        public Integer source_id;
-        public String type;
-        public String street;
-        public String unit;
-        public String city;
-        public String region;
-        public String zip_code;
-        public String county;
-        public String country;
-
-        public Address(Integer source_id, String type, String street, String unit, String city,
-                       String region, String zip_code, String county, String country) {
-
-            this.source_id =  source_id;
-            this.type = type;
-            this.street = street;
-            this.unit = unit;
-            this.city = city;
-            this.region = region;
-            this.zip_code = zip_code;
-            this.county = county;
-            this.country = country;
-        }
-    }*/
-
-
     public static void main(String[] args)
     {
+
         readInFromDatabase();
     }
 
@@ -98,12 +29,12 @@ public class Main
         {
 
             Class.forName("com.mysql.jdbc.Driver");
-           // conn = DriverManager.getConnection
-           //     ("jdbc:mysql://localhost:3306/katzenjammers", "grant", "Soccer57");
-            conn = DriverManager.getConnection("jdbc:mysql://unix3.csc.calpoly" +
-                ".edu/mifierro", "grant", "Soccer57");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/katzenjammers", "grant", "Soccer57");
+            //conn = DriverManager.getConnection("jdbc:mysql://unix3.csc.calpoly" +
+            //    ".edu/mifierro", "grant", "Soccer57");
             stmt = conn.createStatement();
             String sql;
+
             System.out.println("Querying each line from Specialties...");
             sql = "SELECT * FROM Specialties";
             ResultSet rs = stmt.executeQuery(sql);

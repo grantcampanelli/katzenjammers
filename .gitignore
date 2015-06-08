@@ -44,3 +44,11 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
+
+### GRANT
+
+# ALL .idea files
+/.idea
+
+#KATZENJAMMERS.ILM
+/katzenjammers.iml
