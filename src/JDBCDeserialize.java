@@ -36,7 +36,7 @@ public class JDBCDeserialize {
             ResultSet rs;
 
             // Set to query from Source
-            sql = "SELECT * FROM Source LIMIT 10000";
+            sql = "SELECT * FROM Source LIMIT 1000";
             rs = stmt.executeQuery(sql);
 
             // Get number of tuples

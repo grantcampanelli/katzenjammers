@@ -1,0 +1,9 @@
+DROP TABLE Audit;
+DROP TABLE Mastered_Specialties;
+DROP TABLE Mastered_Address;
+DROP TABLE Mastered_Phones;
+DROP TABLE Master;
+DROP TABLE Address;
+DROP TABLE Source;
+DROP TABLE Specialties;
+DROP TABLE Rules;
