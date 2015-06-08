@@ -26,6 +26,8 @@ public class Rule
         // Run a rule given the provided attribute match scores contained
         //in the score
 
-        return false;
+        return (weights[0] * score.nameScore + weights[1] * score.phoneScore +
+            weights[2] * score.addressScore + weights[3] * score.specialtiesScore) >=
+            threshold;
     }
 }

@@ -1,9 +1,7 @@
+import matcher.AddressMatcher;
 import matcher.NameMatcher;
 import matcher.PhoneMatcher;
-import model.Master;
-import model.Score;
-import model.Source;
-import model.Specialties;
+import model.*;
 
 
 import java.io.File;
@@ -36,6 +34,10 @@ public class MatchMaker
                     score.nameScore = NameMatcher.getInstance().match(sources.get
                         (curSource), sources.get(toCompare));
                     score.phoneScore = PhoneMatcher.getInstance().match(sources.get
+                        (curSource), sources.get(toCompare));
+                    score.addressScore = AddressMatcher.getInstance().match(sources.get
+                        (curSource), sources.get(toCompare));
+                    score.specialtiesScore = AddressMatcher.getInstance().match(sources.get
                         (curSource), sources.get(toCompare));
                     
 
