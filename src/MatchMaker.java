@@ -27,17 +27,23 @@ public class MatchMaker
         //match pairwise
         for (int curSource = 0; curSource < sources.size(); curSource++) {
             for (int toCompare = 0; toCompare < sources.size(); toCompare++) {
-                //create score for this match
-                score.nameScore = NameMatcher.getInstance().match(sources.get
-                    (curSource), sources.get(toCompare));
-                score.phoneScore = PhoneMatcher.getInstance().match(sources.get
-                    (curSource), sources.get(toCompare));
+                if (sources.get(curSource).type.equals(sources.get(toCompare).type))
+                {
+                    //create score for this match
+                    score.nameScore = NameMatcher.getInstance().match(sources.get
+                        (curSource), sources.get(toCompare));
+                    score.phoneScore = PhoneMatcher.getInstance().match(sources.get
+                        (curSource), sources.get(toCompare));
 
-                //run each rule
-                for (Rule rule : rules) {
-                    if (rule.runRule(score)) {
-                        matchKeeper.commit(sources.get(curSource), sources.get(toCompare), rule);
-                        continue;
+                    //run each rule
+                    for (Rule rule : rules)
+                    {
+                        if (rule.runRule(score))
+                        {
+                            matchKeeper.commit(sources.get(curSource), sources.get(toCompare), rule);
+
+                            continue;
+                        }
                     }
                 }
             }
