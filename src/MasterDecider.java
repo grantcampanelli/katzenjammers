@@ -53,8 +53,10 @@ public class MasterDecider
             isSoleProprieter = "X";
         }
 
+        return new Master();
 
     }
 
-    return;
+
+
 }
