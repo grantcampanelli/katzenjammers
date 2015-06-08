@@ -12,6 +12,8 @@ import java.util.*;
  */
 public class MatchMaker
 {
+    public static String OutputDirectory = JDBCDeserialize.getOutputDirectory();
+
     public static void main(String[] args) {
         List<Rule> rules = RuleParser.parseRules("rules.ini");
         //you can see the parsing is working
@@ -67,8 +69,8 @@ public class MatchMaker
 
 
 
-        File MastersFile = new File("Masters_Katzenjammers.txt");
-        File CrosswalkFile = new File("Crosswalk_Katzenjammers.txt");
+        File MastersFile = new File(OutputDirectory+"Masters_Katzenjammers.txt");
+        File CrosswalkFile = new File(OutputDirectory+"Crosswalk_Katzenjammers.txt");
         FileWriter mastersWriter, crosswalkWriter;
         try {
             mastersWriter = new FileWriter(MastersFile, false);
@@ -92,20 +94,20 @@ public class MatchMaker
                 printStringItem(pw, m.primarySpec, "\t");
                 printStringItem(pw, m.secondarySpec, "\n");
 
-//                printIntegerItemToConsole(m.id, "\t");
-//                printStringItemToConsole(m.type, "\t");
-//                printStringItemToConsole(m.prefix, "\t");
-//                printStringItemToConsole(m.firstName, "\t");
-//                printStringItemToConsole(m.middleName, "\t");
-//                printStringItemToConsole(m.lastName, "\t");
-//                printStringItemToConsole(m.suffix, "\t");
-//                printStringItemToConsole(m.credential, "\t");
-//                printStringItemToConsole(m.gender, "\t");
-//                printStringItemToConsole(m.dob, "\t");
-//                printStringItemToConsole(m.isSole, "\t");
-//                printStringItemToConsole(m.phone, "\t");
-//                printStringItemToConsole(m.primarySpec, "\t");
-//                printStringItemToConsole(m.secondarySpec, "\n");
+                printIntegerItemToConsole(m.id, "\t");
+                printStringItemToConsole(m.type, "\t");
+                printStringItemToConsole(m.prefix, "\t");
+                printStringItemToConsole(m.firstName, "\t");
+                printStringItemToConsole(m.middleName, "\t");
+                printStringItemToConsole(m.lastName, "\t");
+                printStringItemToConsole(m.suffix, "\t");
+                printStringItemToConsole(m.credential, "\t");
+                printStringItemToConsole(m.gender, "\t");
+                printStringItemToConsole(m.dob, "\t");
+                printStringItemToConsole(m.isSole, "\t");
+                printStringItemToConsole(m.phone, "\t");
+                printStringItemToConsole(m.primarySpec, "\t");
+                printStringItemToConsole(m.secondarySpec, "\n");
             }
             pw.close();
 

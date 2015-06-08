@@ -10,10 +10,19 @@ import java.util.Map;
 
 import model.*;
 
+
+
 public class JDBCDeserialize {
 //    public static void main(String[] args) {
 //        readInFromDatabase();
 //    }
+
+    // !!! SET NUM SOURCES HERE! !!!
+    public static Integer NumSources = 2000;
+    public static String OutputDirectory = "TestOutput/" + Integer.toString(NumSources) + "_";
+    public static String getOutputDirectory() {
+        return OutputDirectory;
+    }
 
     public static List<Source> readInFromDatabase() {
         Connection conn = null;
@@ -36,7 +45,7 @@ public class JDBCDeserialize {
             ResultSet rs;
 
             // Set to query from Source
-            sql = "SELECT * FROM Source LIMIT 2000";
+            sql = "SELECT * FROM Source LIMIT "+Integer.toString(NumSources);
             rs = stmt.executeQuery(sql);
 
             // Get number of tuples
@@ -236,7 +245,7 @@ public class JDBCDeserialize {
 
     public static void printAddressesToFile(Address[] addresses, Integer numTuplesAddress) {
 
-        File AddressFile = new File("Addresses_Katzenjammers.txt");
+        File AddressFile = new File(OutputDirectory + "Addresses_Katzenjammers.txt");
         FileWriter addressWriter;
         try {
             addressWriter = new FileWriter(AddressFile, false);
