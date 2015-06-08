@@ -20,28 +20,28 @@ public class NameMatcher implements Matcher
         return instance;
     }
 
-    public double match(Source s1, Source s2) {
+    public double match(Source ss1, Source ss2) {
         double ret = 0.0;
         double jwret = 0.0;
         double lev = 0.0;
         String temp;
-        String st1 = s1.name;
-        String st2 = s2.name;
-        
-        if(st1.length() > st2.length()) {
-            temp = st1;
-            st1 = st2;
-            st2 = temp;
+        String s1 = ss1.name;
+        String s2 = ss2.name;
+
+        if(s1.length() > s2.length()) {
+            temp = s1;
+            s1 = s2;
+            s2 = temp;
         }
-        JaroWinkler jw = new JaroWinkler(st1, st2);
-        jwret = jw.getSimilarity(st1, st2);
-        lev = evenshteinDistance.distance(st1, st2);
+        JaroWinkler jw = new JaroWinkler(s1, s2);
+        jwret = jw.getSimilarity(s1, s2);
+        lev = LevenshteinDistance.distance(s1, s2);
         ret = lev * jwret;// normalize this
         return ret;
     }
 
-    public class LevenshteinDistance {
-
+    public static class LevenshteinDistance {
+ 
         public static int distance(String a, String b) {
             a = a.toLowerCase();
             b = b.toLowerCase();
@@ -60,37 +60,37 @@ public class NameMatcher implements Matcher
                 }
             }
             return costs[b.length()];
-        }
+        }    
     }
 
     public class JaroWinkler
     {
         private String compOne;
         private String compTwo;
-
+    
         private String theMatchA = "";
         private String theMatchB = "";
         private int mRange = -1;
-
+    
         public JaroWinkler()
         {
         }
-
+    
         public JaroWinkler(String s1, String s2)
         {
             compOne = s1;
             compTwo = s2;
         }
-
+    
         public double getSimilarity(String s1, String s2)
         {
             compOne = s1;
             compTwo = s2;
-
+    
             mRange = Math.max(compOne.length(), compTwo.length()) / 2 - 1;
-
+    
             double res = -1;
-
+    
             int m = getMatch();
             if(m == 0)
             {
@@ -103,23 +103,23 @@ public class NameMatcher implements Matcher
             }
             int l1 = compOne.length();
             int l2 = compTwo.length();
-
+    
             double f = 0.3333;
             double mt = (double)(m-t)/m;
             double jw = f * ((double)m/l1+(double)m/l2+(double)mt);
             res = jw + getCommonPrefix(compOne,compTwo) * (0.1*(1.0 - jw));
-
+    
             return res;
         }
-
+    
         private int getMatch()
         {
-
+    
             theMatchA = "";
             theMatchB = "";
-
+    
             int matches = 0;
-
+    
             for (int i = 0; i < compOne.length(); i++)
             {
                 //Look backward
@@ -134,7 +134,7 @@ public class NameMatcher implements Matcher
                     }
                     counter++;
                 }
-
+    
                 //Look forward
                 counter = 1;
                 while(counter <= mRange && i < compTwo.length() && counter + i < compTwo.length())
@@ -167,7 +167,7 @@ public class NameMatcher implements Matcher
                     }
                     counter++;
                 }
-
+    
                 //Look forward
                 counter = 1;
                 while(counter <= mRange && i < theMatchB.length() && (counter + i) < theMatchB.length())
@@ -181,7 +181,7 @@ public class NameMatcher implements Matcher
             }
             return transPositions;
         }
-
+    
         private int getCommonPrefix(String compOne, String compTwo)
         {
             int cp = 0;
