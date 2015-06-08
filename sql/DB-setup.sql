@@ -26,8 +26,8 @@ create table Source(
 create table Address(
     source_id INT,
     type CHAR(4), -- MAIL or PRAC
-    street VARCHAR(50),
-    unit VARCHAR(10),
+    street VARCHAR(100),
+    unit VARCHAR(100),
     city VARCHAR(100),
     region VARCHAR(50),
     zip_code VARCHAR(15),
