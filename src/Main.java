@@ -13,12 +13,13 @@ public class Main
     {
 
         readInFromDatabase();
+        addToDatabase();
 
     }
 
     public static void addToDatabase() {
         List<Master> masterList = new ArrayList<Master>();
-
+        System.out.println("Starting in addToDatabase()");
         masterList = MatchKeeper.getInstance().getMasters();
 
         for(Master m : masterList) {
@@ -38,6 +39,7 @@ public class Main
 //        public String secondarySpec;
         }
 
+        System.out.println("Done with addToDatabase()");
     }
 
     public static List<Source> readInFromDatabase()
@@ -57,8 +59,7 @@ public class Main
         {
 
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection
-                ("jdbc:mysql://localhost:3306/Katzenjammers", "grant", "Soccer57");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Katzenjammers", "grant", "Soccer57");
             //conn = DriverManager.getConnection("jdbc:mysql://unix3.csc.calpoly" +
             //    ".edu/mifierro", "grant", "Soccer57");
             stmt = conn.createStatement();
@@ -190,7 +191,7 @@ public class Main
 
 
             rs = stmt.executeQuery(sql);
-
+            index = 0;
             while (rs.next())
             {
 
