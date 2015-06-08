@@ -13,6 +13,31 @@ public class Main
     {
 
         readInFromDatabase();
+
+    }
+
+    public static void addToDatabase() {
+        List<Master> masterList = new ArrayList<Master>();
+
+        masterList = MatchKeeper.getInstance().getMasters();
+
+        for(Master m : masterList) {
+            System.out.println("Master: ID:"+m.id);
+//        public String type;
+//        public String prefix;
+//        public String firstName;
+//        public String middleName;
+//        public String lastName;
+//        public String suffix;
+//        public String credential;
+//        public String gender;
+//        public String dob;
+//        public String isSole;
+//        public String phone;
+//        public String primarySpec;
+//        public String secondarySpec;
+        }
+
     }
 
     public static List<Source> readInFromDatabase()

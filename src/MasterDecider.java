@@ -11,7 +11,7 @@ import java.util.Set;
 //TODO this class is not done yet.
 public class MasterDecider
 {
-    public Master master(Integer masterId, Set<Source> src) {
+    public static Master master(Integer masterId, Set<Source> src) {
         Map<String, Integer> prefixMap = new HashMap <String, Integer>();
         Map<String, Integer> suffixMap = new HashMap <String, Integer>();
         Map<String, Integer> credentialMap = new HashMap <String, Integer>();

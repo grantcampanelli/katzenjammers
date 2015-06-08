@@ -1,6 +1,7 @@
 import model.Master;
 import model.Source;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -10,9 +11,25 @@ public class MatchKeeper
 {
     Integer availableMasterId = 0;
     //maps source ID's to Master Id's
-    private Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-    private Map<Integer, Set<Source>> listMap = new HashMap<Integer, Set<Source>>();
+    private Map<Integer, Integer> map = new HashMap<Integer, Integer>();   // cross walk - source to master
+    private Map<Integer, Set<Source>> listMap = new HashMap<Integer, Set<Source>>(); // maps master ID to set of sources
+    private static MatchKeeper instance = null;
 
+    private MatchKeeper() {
+
+    }
+    public static MatchKeeper getInstance() {
+        if (instance == null)
+            instance = new MatchKeeper();
+        return instance;
+    }
+//    for(Entry<String, HashMap> entry : selects.entrySet()) {
+//    String key = entry.getKey();
+//    HashMap value = entry.getValue();
+//
+//    // do what you have to do here
+//    // In your case, an other loop.
+//}
     /**
      * Saves a match.  Associates each source with a master ID,
      * and also associates each masterId with a set of sources (same data,
@@ -51,7 +68,13 @@ public class MatchKeeper
      * @return
      */
     public List<Master> getMasters() {
-        return null;
+        // build list of masters
+        ArrayList<Master> masterList = new ArrayList<Master>();
+        for (Map.Entry<Integer, Set<Source>> entry : listMap.entrySet()) {
+            masterList.add(MasterDecider.master(entry.getKey(), entry.getValue()));
+        }
+
+        return masterList;
     }
 
     public Map<Integer, Integer> getCrossWalkMap() {

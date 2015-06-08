@@ -19,7 +19,7 @@ public class MatchMaker
         }
 
         Score score = new Score();
-        MatchKeeper matchKeeper = new MatchKeeper();
+        MatchKeeper matchKeeper = MatchKeeper.getInstance();
 
         List<Source> sources = Main.readInFromDatabase();
         System.out.println("HI");
