@@ -50,6 +50,14 @@ public class AddressMatcher implements Matcher
         String[] u = new String[2], s = new String[2];
         double score = 0.0;
 
+        if(a1 == null || a2 == null) {
+            //System.out.println("a1 or a2 was null");
+            return 0;
+        }
+        //else
+        //System.out.println("a1 or a2 not null");
+
+
         if(a1.country.trim().toUpperCase().equals("NULL") &&
                 a1.county.trim().toUpperCase().equals("NULL") &&
                 a1.zip_code.trim().toUpperCase().equals("NULL") &&

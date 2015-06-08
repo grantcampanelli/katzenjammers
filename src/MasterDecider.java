@@ -39,11 +39,10 @@ public class MasterDecider
                 bestLast = names[2];
             }
 
-            if (s.solProp.equals("Y")) {
+            if (s.solProp == "Y") {
                 isSoleProprieter = "Y";
             }
-            else if (s.solProp.equals("N"))
-            {
+            else if (s.solProp == "N") {
                 isSoleProprieter = "N";
             }
         }

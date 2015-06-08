@@ -123,6 +123,10 @@ public class JDBCDeserialize
                 street = rs.getString("street") == null ? "NULL" : rs.getString
                     ("street");
                 unit = rs.getString("unit") == null ? "NULL" : rs.getString("unit");
+//                if (rs.getString("unit") == null) {
+//                    System.out.println("found a null literal");
+//                    System.exit(1);
+//                }
                 city = rs.getString("city") == null ? "NULL" : rs.getString("city");
                 region = rs.getString("region") == null ? "NULL" : rs.getString
                     ("region");
