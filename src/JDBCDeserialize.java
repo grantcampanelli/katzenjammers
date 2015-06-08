@@ -119,14 +119,19 @@ public class JDBCDeserialize
                 else
                     source_id = rs.getInt("source_id");
 
-                type = rs.getString("type");
-                street = rs.getString("street");
-                unit = rs.getString("unit");
-                city = rs.getString("city");
-                region = rs.getString("region");
-                zip_code = rs.getString("zip_code");
-                county = rs.getString("county");
-                country = rs.getString("country");
+                type = rs.getString("type") == null ? "NULL" : rs.getString("type");
+                street = rs.getString("street") == null ? "NULL" : rs.getString
+                    ("street");
+                unit = rs.getString("unit") == null ? "NULL" : rs.getString("unit");
+                city = rs.getString("city") == null ? "NULL" : rs.getString("city");
+                region = rs.getString("region") == null ? "NULL" : rs.getString
+                    ("region");
+                zip_code = rs.getString("zip_code") == null ? "NULL" : rs.getString
+                    ("zip_code");
+                county = rs.getString("county") == null ? "NULL" : rs.getString
+                    ("county");
+                country = rs.getString("country") == null ? "NULL" : rs.getString
+                    ("country");
 
                 addresses[index] = new Address(source_id, type, street, unit, city, region, zip_code, county, country);
                 if (sourceMap.get(source_id) != null) {
