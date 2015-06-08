@@ -20,12 +20,15 @@ public class NameMatcher implements Matcher
         return instance;
     }
 
-    public double match(Source s1, Source s2) {
+    public double match(Source ss1, Source ss2) {
         double ret = 0.0;
         double jwret = 0.0;
         double lev = 0.0;
         String temp;
-        
+
+        String s1 = ss1.name;
+        String s2 = ss2.name;
+
         if(s1.length() > s2.length()) {
             temp = s1;
             s1 = s2;
@@ -33,12 +36,12 @@ public class NameMatcher implements Matcher
         }
         JaroWinkler jw = new JaroWinkler(s1, s2);
         jwret = jw.getSimilarity(s1, s2);
-        lev = evenshteinDistance.distance(s1, s2);
+        lev = LevenshteinDistance.distance(s1, s2);
         ret = lev * jwret;// normalize this
         return ret;
     }
 
-    public class LevenshteinDistance {
+    public static class LevenshteinDistance {
  
         public static int distance(String a, String b) {
             a = a.toLowerCase();
