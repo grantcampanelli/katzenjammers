@@ -25,15 +25,17 @@ public class NameMatcher implements Matcher
         double jwret = 0.0;
         double lev = 0.0;
         String temp;
+        String st1 = s1.name;
+        String st2 = s2.name;
         
-        if(s1.length() > s2.length()) {
-            temp = s1;
-            s1 = s2;
-            s2 = temp;
+        if(st1.length() > st2.length()) {
+            temp = st1;
+            st1 = st2;
+            st2 = temp;
         }
-        JaroWinkler jw = new JaroWinkler(s1, s2);
-        jwret = jw.getSimilarity(s1, s2);
-        lev = evenshteinDistance.distance(s1, s2);
+        JaroWinkler jw = new JaroWinkler(st1, st2);
+        jwret = jw.getSimilarity(st1, st2);
+        lev = evenshteinDistance.distance(st1, st2);
         ret = lev * jwret;// normalize this
         return ret;
     }
