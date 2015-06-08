@@ -4,7 +4,7 @@ import matcher.PhoneMatcher;
 import model.*;
 
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -65,26 +65,107 @@ public class MatchMaker
         masterList = MatchKeeper.getInstance().getMasters();
         System.out.println("Master List length: "+masterList.size());
 
-        for(Master m : masterList) {
-            System.out.println("Master: ID:"+m.id);
-//        public String type;
-//        public String prefix;
-//        public String firstName;
-//        public String middleName;
-//        public String lastName;
-//        public String suffix;
-//        public String credential;
-//        public String gender;
-//        public String dob;
-//        public String isSole;
-//        public String phone;
-//        public String primarySpec;
-//        public String secondarySpec;
+
+
+        File file = new File("outputGrant");
+        FileWriter writer;
+        try {
+            writer = new FileWriter(file, false);
+            PrintWriter pw = new PrintWriter(writer);
+
+            printColumns(pw);
+
+            for(Master m : masterList) {
+                printIntegerItem(pw, m.id, "\t");
+                printStringItem(pw, m.type, "\t");
+                printStringItem(pw, m.prefix, "\t");
+                printStringItem(pw, m.firstName, "\t");
+                printStringItem(pw, m.middleName, "\t");
+                printStringItem(pw, m.lastName, "\t");
+                printStringItem(pw, m.suffix, "\t");
+                printStringItem(pw, m.credential, "\t");
+                printStringItem(pw, m.gender, "\t");
+                printStringItem(pw, m.dob, "\t");
+                printStringItem(pw, m.isSole, "\t");
+                printStringItem(pw, m.phone, "\t");
+                printStringItem(pw, m.primarySpec, "\t");
+                printStringItem(pw, m.secondarySpec, "\n");
+
+//                printIntegerItemToConsole(m.id, "\t");
+//                printStringItemToConsole(m.type, "\t");
+//                printStringItemToConsole(m.prefix, "\t");
+//                printStringItemToConsole(m.firstName, "\t");
+//                printStringItemToConsole(m.middleName, "\t");
+//                printStringItemToConsole(m.lastName, "\t");
+//                printStringItemToConsole(m.suffix, "\t");
+//                printStringItemToConsole(m.credential, "\t");
+//                printStringItemToConsole(m.gender, "\t");
+//                printStringItemToConsole(m.dob, "\t");
+//                printStringItemToConsole(m.isSole, "\t");
+//                printStringItemToConsole(m.phone, "\t");
+//                printStringItemToConsole(m.primarySpec, "\t");
+//                printStringItemToConsole(m.secondarySpec, "\n");
+            }
+            pw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
 
         System.out.println("Done with printing masters");
         for (String s : MatchKeeper.getInstance().getAllRuleDescriptions()) {
             System.out.println(s);
         }
     }
+
+    public static void printColumns(PrintWriter pw) {
+        pw.print("Master Id\t");
+        pw.print("Provider Type\t");
+        pw.print("Name Prefix\t");
+        pw.print("First Name\t");
+        pw.print("Middle Name\t");
+        pw.print("Last Name\t");
+        pw.print("Name Suffix\t");
+        pw.print("Medical Credential\t");
+        pw.print("Gender\t");
+        pw.print("Date of Birth\t");
+        pw.print("Is Sole Proprietor\t");
+        pw.print("Primary Phone\t");
+        pw.print("Primary Specialty\t");
+        pw.print("Secondary Specialty\n");
+    }
+
+    public static void printIntegerItem(PrintWriter pw, Integer item, String delimiter) {
+        if(item == null)
+            pw.print("NULL"+delimiter);
+        else
+            pw.print(item + delimiter);
+    }
+
+    public static void printStringItem(PrintWriter pw, String item, String delimiter) {
+        if(item == null)
+            pw.print("NULL"+delimiter);
+        else
+            pw.print(item + delimiter);
+    }
+
+
+    public static void printIntegerItemToConsole(Integer item, String delimiter) {
+        if(item == null)
+            System.out.print("NULL"+delimiter);
+        else
+            System.out.print(item + delimiter);
+    }
+
+    public static void printStringItemToConsole(String item, String delimiter) {
+        if(item == null)
+            System.out.print("NULL"+delimiter);
+        else
+            System.out.print(item + delimiter);
+    }
+
+
+
 }
