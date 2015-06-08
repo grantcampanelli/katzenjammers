@@ -3,10 +3,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Date;
+import java.util.*;
 
 import model.*;
 
@@ -18,12 +16,34 @@ public class JDBCDeserialize {
 //    }
 
     // !!! SET NUM SOURCES HERE! !!!
-    public static Integer NumSources = 5000;
 
 
-    public static String OutputDirectory = "TestOutput/" + Integer.toString(NumSources) + "_";
+
+
+    public static Integer LimitSources = 0;
+    public static Integer NumSources = 500;
+
+    public static void ReadNumSources() {
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("How many sources would you like to limit to? Use 0 to set no limit");
+        NumSources = in.nextInt();
+        System.out.println("You chose "+ NumSources);
+
+        if(NumSources == 0)
+            LimitSources = 0;
+        else
+            LimitSources = 1;
+
+    }
+
     public static String getOutputDirectory() {
-        return OutputDirectory;
+        if(LimitSources == 1) {
+            return  "TestOutput/" + Integer.toString(NumSources) + "_";
+        }
+        else {
+            return "TestOutput/Full_Test_";
+        }
     }
 
     public static List<Source> readInFromDatabase() {
@@ -47,7 +67,15 @@ public class JDBCDeserialize {
             ResultSet rs;
 
             // Set to query from Source
-            sql = "SELECT * FROM Source LIMIT "+Integer.toString(NumSources);
+            if(LimitSources == 1)  {
+                sql = "SELECT * FROM Source LIMIT "+Integer.toString(NumSources);
+            }
+            else {
+                sql = "SELECT * FROM Source";
+            }
+
+
+
             rs = stmt.executeQuery(sql);
 
             // Get number of tuples
@@ -247,7 +275,7 @@ public class JDBCDeserialize {
 
     public static void printAddressesToFile(Address[] addresses, Integer numTuplesAddress) {
 
-        File AddressFile = new File(OutputDirectory + "Addresses_Katzenjammers.txt");
+        File AddressFile = new File(getOutputDirectory() + "Addresses_Katzenjammers.txt");
         FileWriter addressWriter;
         try {
             addressWriter = new FileWriter(AddressFile, false);

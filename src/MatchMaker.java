@@ -12,9 +12,12 @@ import java.util.*;
  */
 public class MatchMaker
 {
-    public static String OutputDirectory = JDBCDeserialize.getOutputDirectory();
+    public static String OutputDirectory;
 
     public static void main(String[] args) {
+        JDBCDeserialize.ReadNumSources();
+        OutputDirectory = JDBCDeserialize.getOutputDirectory();
+
         List<Rule> rules = RuleParser.parseRules("rules.ini");
         //you can see the parsing is working
         for (Rule r : rules) {
