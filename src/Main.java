@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.*;
 
@@ -23,71 +25,20 @@ public class Main
         Date dob;
         Integer source_id, parentId, specialtyId, primarySpecialty = null, secondarySpecialty = null;
         Integer numTuplesSpecialties = 0, numTuplesSource = 0, numTuplesAddress = 0, index = 0;
+        Map<Integer, Source> sourceMap = new HashMap<Integer, Source>();
 
 
         try
         {
 
             Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/katzenjammers", "grant", "Soccer57");
+            conn = DriverManager.getConnection
+                ("jdbc:mysql://localhost:3306/Katzenjammers", "grant", "Soccer57");
             //conn = DriverManager.getConnection("jdbc:mysql://unix3.csc.calpoly" +
             //    ".edu/mifierro", "grant", "Soccer57");
             stmt = conn.createStatement();
             String sql;
-
-            System.out.println("Querying each line from Specialties...");
-            sql = "SELECT * FROM Specialties";
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next())
-            {
-                numTuplesSpecialties++;
-            }
-            System.out.print("Num Specialties: " + numTuplesSpecialties + "\n");
-
-            Specialties[] specialties = new Specialties[numTuplesSpecialties];
-
-
-            rs = stmt.executeQuery(sql);
-
-            while (rs.next())
-            {
-
-                // read in values to variables
-                // reading in null with getInt makes it 0, which is not good
-                if (rs.getString("parent_id") == null)
-                    parentId = null;
-                else
-                    parentId = rs.getInt("parent_id");
-
-                // fix for getInt on null = 0
-                if (rs.getString("specialty_id") == null)
-                    specialtyId = null;
-                else
-                    specialtyId = rs.getInt("specialty_id");
-
-                title = rs.getString("title");
-                code = rs.getString("code");
-                website = rs.getString("website");
-
-                // create new object in the array
-                specialties[index] = new Specialties(parentId, specialtyId, title,
-                    code, website);
-
-
-                /*
-                // print out specialties
-                System.out.println("ParentId: "+specialties[index].parentId+" Id: "+
-                        specialties[index].specialtyId+" Title: "+specialties[index].title+
-                        " Code: "+specialties[index].code+" Website: "+
-                        specialties[index].website);
-                */
-                index++;
-            }
-
-            System.out.println("Done reading Specialties");
-            System.out.println("Querying each line from Source...");
-
+            ResultSet rs;
 
             // Set to query from Source
             sql = "SELECT * FROM Source";
@@ -133,9 +84,11 @@ public class Main
 
                 // create new source object and add to array
                 //source[index]
-                source.add(new Source(source_id, type, name, gender, dob,
-                            is_sole_proprieter,
-                            phone, primarySpecialty, secondarySpecialty));
+                Source s = new Source(source_id, type, name, gender, dob,
+                    is_sole_proprieter,
+                    phone, primarySpecialty, secondarySpecialty);
+                source.add(s);
+                sourceMap.put(source_id, s);
 
                 /*
                 //Print out source array
@@ -185,18 +138,71 @@ public class Main
                 country = rs.getString("country");
 
                 addresses[index] = new Address(source_id, type, street, unit, city, region, zip_code, county, country);
-
-                /*
-                // print out address array
-                System.out.println("source_id: "+addresses[index].source_id+" type: "+addresses[index].type+
-                        " street: "+addresses[index].street+" unit: "+addresses[index].unit+" city: "+
-                        addresses[index].city+" region: "+addresses[index].region+" zip_code: "+
-                        addresses[index].zip_code+" county: "+addresses[index].county+
-                        " country: "+addresses[index].country);
-                */
+                if (sourceMap.get(source_id) != null) {
+                    if (addresses[index].type.equals("MAIL"))
+                    {
+                        sourceMap.get(source_id).mailingAddress = addresses[index];
+                    }
+                    else if (addresses[index].type.equals("PRAC")) {
+                        sourceMap.get(source_id).practiceAddress = addresses[index];
+                    }
+                }
                 index++;
             }
             System.out.print("Done reading Address");
+
+            System.out.println("Querying each line from Specialties...");
+            sql = "SELECT * FROM Specialties";
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next())
+            {
+                numTuplesSpecialties++;
+            }
+            System.out.print("Num Specialties: " + numTuplesSpecialties + "\n");
+
+            Specialties[] specialties = new Specialties[numTuplesSpecialties];
+
+
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next())
+            {
+
+                // read in values to variables
+                // reading in null with getInt makes it 0, which is not good
+                if (rs.getString("parent_id") == null)
+                    parentId = null;
+                else
+                    parentId = rs.getInt("parent_id");
+
+                // fix for getInt on null = 0
+                if (rs.getString("specialty_id") == null)
+                    specialtyId = null;
+                else
+                    specialtyId = rs.getInt("specialty_id");
+
+                title = rs.getString("title");
+                code = rs.getString("code");
+                website = rs.getString("website");
+
+                // create new object in the array
+                specialties[index] = new Specialties(parentId, specialtyId, title,
+                    code, website);
+
+
+                /*
+                // print out specialties
+                System.out.println("ParentId: "+specialties[index].parentId+" Id: "+
+                        specialties[index].specialtyId+" Title: "+specialties[index].title+
+                        " Code: "+specialties[index].code+" Website: "+
+                        specialties[index].website);
+                */
+                index++;
+            }
+
+            System.out.println("Done reading Specialties");
+            System.out.println("Querying each line from Source...");
 
             rs.close();
             stmt.close();
