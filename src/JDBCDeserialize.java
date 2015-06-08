@@ -8,6 +8,9 @@ import model.*;
 
 public class JDBCDeserialize
 {
+    public static void main(String[] args) {
+        readInFromDatabase();
+    }
 
     public static List<Source> readInFromDatabase()
     {
