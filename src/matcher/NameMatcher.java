@@ -25,7 +25,6 @@ public class NameMatcher implements Matcher
         double jwret = 0.0;
         double lev = 0.0;
         String temp;
-
         String s1 = ss1.name;
         String s2 = ss2.name;
 
