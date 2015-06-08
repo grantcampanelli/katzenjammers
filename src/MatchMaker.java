@@ -81,6 +81,5 @@ public class MatchMaker
         }
 
         System.out.println("Done with printing masters");
-        }
-
+    }
 }
