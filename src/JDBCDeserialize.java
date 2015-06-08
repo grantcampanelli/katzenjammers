@@ -6,48 +6,8 @@ import java.util.Map;
 
 import model.*;
 
-public class Main
+public class JDBCDeserialize
 {
-
-    public static void main(String[] args)
-    {
-
-        readInFromDatabase();
-        createMasterFile();
-
-    }
-    public static void createCrossWalkFile() {
-        Map<Integer, Integer> crosswalk = new HashMap<Integer, Integer>();
-        crosswalk = MatchKeeper.getInstance().getCrossWalkMap();
-
-
-
-    }
-
-    public static void createMasterFile() {
-        List<Master> masterList = new ArrayList<Master>();
-        System.out.println("Starting in addToDatabase()");
-        masterList = MatchKeeper.getInstance().getMasters();
-
-        for(Master m : masterList) {
-            System.out.println("Master: ID:"+m.id);
-//        public String type;
-//        public String prefix;
-//        public String firstName;
-//        public String middleName;
-//        public String lastName;
-//        public String suffix;
-//        public String credential;
-//        public String gender;
-//        public String dob;
-//        public String isSole;
-//        public String phone;
-//        public String primarySpec;
-//        public String secondarySpec;
-        }
-
-        System.out.println("Done with addToDatabase()");
-    }
 
     public static List<Source> readInFromDatabase()
     {
@@ -74,7 +34,7 @@ public class Main
             ResultSet rs;
 
             // Set to query from Source
-            sql = "SELECT * FROM Source";
+            sql = "SELECT * FROM Source LIMIT 1000";
             rs = stmt.executeQuery(sql);
 
             // Get number of tuples
