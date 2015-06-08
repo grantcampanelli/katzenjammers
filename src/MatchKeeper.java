@@ -85,4 +85,8 @@ public class MatchKeeper
     public Map<Integer, Integer> getCrossWalkMap() {
         return map;
     }
+
+    public Set<String> getAllRuleDescriptions() {
+        return new HashSet<String>(auditMap.values());
+    }
 }

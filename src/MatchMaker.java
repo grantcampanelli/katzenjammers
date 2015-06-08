@@ -83,5 +83,8 @@ public class MatchMaker
         }
 
         System.out.println("Done with printing masters");
+        for (String s : MatchKeeper.getInstance().getAllRuleDescriptions()) {
+            System.out.println(s);
+        }
     }
 }
