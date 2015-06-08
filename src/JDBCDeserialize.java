@@ -36,7 +36,7 @@ public class JDBCDeserialize {
             ResultSet rs;
 
             // Set to query from Source
-            sql = "SELECT * FROM Source LIMIT 1000";
+            sql = "SELECT * FROM Source";
             rs = stmt.executeQuery(sql);
 
             // Get number of tuples
@@ -236,7 +236,7 @@ public class JDBCDeserialize {
 
     public static void printAddressesToFile(Address[] addresses, Integer numTuplesAddress) {
 
-        File AddressFile = new File("Addresses_Katzenjammers.txt");
+        File AddressFile = new File("FullTest/Addresses_Katzenjammers.txt");
         FileWriter addressWriter;
         try {
             addressWriter = new FileWriter(AddressFile, false);
@@ -267,7 +267,6 @@ public class JDBCDeserialize {
             }
 
             pw.close();
-
 
         } catch (IOException e) {
             e.printStackTrace();

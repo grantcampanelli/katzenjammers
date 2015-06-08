@@ -52,3 +52,7 @@ crashlytics-build.properties
 
 #KATZENJAMMERS.ILM
 /katzenjammers.iml
+
+
+#jar build
+/src/META-INF/MANIFEST.MF
