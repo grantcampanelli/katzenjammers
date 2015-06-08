@@ -1,6 +1,7 @@
 import model.Master;
 import model.Source;
 
+import javax.print.attribute.IntegerSyntax;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -13,6 +14,8 @@ public class MatchKeeper
     //maps source ID's to Master Id's
     private Map<Integer, Integer> map = new HashMap<Integer, Integer>();   // cross walk - source to master
     private Map<Integer, Set<Source>> listMap = new HashMap<Integer, Set<Source>>(); // maps master ID to set of sources
+    private Map<Map.Entry<Integer, Integer>, String> auditMap = new HashMap<Map
+        .Entry<Integer, Integer>, String>();
     private static MatchKeeper instance = null;
 
     private MatchKeeper() {
@@ -61,6 +64,8 @@ public class MatchKeeper
         }
         listMap.get(masterId).add(source1);
         listMap.get(masterId).add(source2);
+        auditMap.put(new AbstractMap.SimpleEntry<Integer, Integer>(source1.id,
+            source2.id), why.description);
     }
 
     /**

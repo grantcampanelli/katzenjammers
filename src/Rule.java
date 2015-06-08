@@ -10,7 +10,7 @@ public class Rule
     double threshold;
 
     public Rule(double nameWeight, double phoneWeight, double addressWeight,
-                double specialtyWeight, double threshold) {
+                double specialtyWeight, double threshold, String description) {
         weights = new Double[4];
         weights[0] = nameWeight;
         weights[1] = phoneWeight;
@@ -18,6 +18,7 @@ public class Rule
         weights[3] = specialtyWeight;
 
         this.threshold = threshold;
+        this.description = description;
     }
 
 

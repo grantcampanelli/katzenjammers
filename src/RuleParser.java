@@ -29,7 +29,7 @@ public class RuleParser
                 double specialtiesWeight = Double.parseDouble(curRule.get("specialtiesWeight"));
                 double threshold = Double.parseDouble(curRule.get("threshold"));
                 rules.add(new Rule(nameWeight, phoneWeight, addressWeight,
-                    specialtiesWeight, threshold));
+                    specialtiesWeight, threshold, curRule.get("description")));
             }
             return rules;
         }
