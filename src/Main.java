@@ -13,11 +13,18 @@ public class Main
     {
 
         readInFromDatabase();
-        addToDatabase();
+        createMasterFile();
+
+    }
+    public static void createCrossWalkFile() {
+        Map<Integer, Integer> crosswalk = new HashMap<Integer, Integer>();
+        crosswalk = MatchKeeper.getInstance().getCrossWalkMap();
+
+
 
     }
 
-    public static void addToDatabase() {
+    public static void createMasterFile() {
         List<Master> masterList = new ArrayList<Master>();
         System.out.println("Starting in addToDatabase()");
         masterList = MatchKeeper.getInstance().getMasters();
