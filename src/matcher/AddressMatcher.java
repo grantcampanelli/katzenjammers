@@ -1,201 +1,135 @@
 package matcher;
-import model.Source;
-import java.io.*;
-import java.util.Scanner;
+import model.*;
+
+import java.util.*;
 
 /**
- * Matcher for the names. This is not yet implemented. It should compile,
- * though we havent had a chance to test it yet. it compares using
- * a few simple rules though a few more would be needed to be robust..
+ * Created by Vincent Escoto on 6/02/2015.
  */
-public class NameMatcher implements Matcher
+public class AddressMatcher implements Matcher
 {
-    private static NameMatcher instance = null;
-    public static final double MATCH = 1.0;
-    public static final double STRONG_MATCH = 0.75;
-    public static final double MAYBE_MATCH = 0.5;
-    public static final double WEAK_MATCH = 0.25;
-    public static final double NO_MATCH = 0.0;
-
-    private NameMatcher() {
+    private static AddressMatcher instance = null;
+    private String[] IgnoreTable = {"STE","SUITE","FLOOR","FL","#","UNIT","TH","APT","ST","RM","MAIL","CODE","BLDG"};
+    private String[] StreetTable = {"NORTH","SOUTH","EAST","WEST","AVENUE","AVE","BOULEVARD","BLVD","NE","SE","SW","STREET","ST","ROAD",
+            "RD","CULDESAC","CT","WAY","PARKWAY","PKWY","LANE","LN","DRIVE","DR","HIGHWAY","HWY","PIKE","CENTER","CTR",
+            "PARK","LOOP","N","S","E","W"};
+    private AddressMatcher() {
     }
 
-    public static NameMatcher getInstance() {
+    public static AddressMatcher getInstance() {
         if (instance == null) {
-            instance = new NameMatcher();
+            instance = new AddressMatcher();
         }
         return instance;
     }
 
-    public double match(Source s1, Source s2) {
-        double ret = 0.0;
-        double jwret = 0.0;
-        double lev = 0.0;
-        String temp;
-        
-        if(s1.length() > s2.length()) {
-            temp = s1;
-            s1 = s2;
-            s2 = temp;
-        }
-        JaroWinkler jw = new JaroWinkler(s1, s2);
-        jwret = jw.getSimilarity(s1, s2);
-        lev = LevenshteinDistance.distance(s1, s2);
-        //if the strings are exact matches, the names match
-        if(lev == 0) {
-            return MATCH;
-        }
-        //if the edit distance is signifigant but jw value is high, it still might be a match
-        if(lev > 3 && jwret > 90) {
-            return MAYBE_MATCH;
-        }
-        return NO_MATCH;
-    }
-
-    public class LevenshteinDistance {
- 
-        public static int distance(String a, String b) {
-            a = a.toLowerCase();
-            b = b.toLowerCase();
-            // i == 0
-            int [] costs = new int [b.length() + 1];
-            for (int j = 0; j < costs.length; j++)
-                costs[j] = j;
-            for (int i = 1; i <= a.length(); i++) {
-                // j == 0; nw = lev(i - 1, j)
-                costs[0] = i;
-                int nw = i - 1;
-                for (int j = 1; j <= b.length(); j++) {
-                    int cj = Math.min(1 + Math.min(costs[j], costs[j - 1]), a.charAt(i - 1) == b.charAt(j - 1) ? nw : nw + 1);
-                    nw = costs[j];
-                    costs[j] = cj;
-                }
-            }
-            return costs[b.length()];
-        }    
-    }
-//JaroWinkler
-//CREDITS: http://blogs.ucl.ac.uk/chime/2010/06/28/java-example-code-of-common-similarity-algorithms-used-in-data-mining/
-//Made less broken by Cameron
-//THIS CLASS DOESN"T LIKE WHEN the second argument is shorter or when it gets empty strings
-    public class JaroWinkler
+    public double match(Source s1, Source s2)
     {
-        private String compOne;
-        private String compTwo;
-    
-        private String theMatchA = "";
-        private String theMatchB = "";
-        private int mRange = -1;
-    
-        public JaroWinkler()
+        double mailScore = match(s1.mailingAddress,s2.mailingAddress),
+                practiceScore = match(s1.practiceAddress,s2.practiceAddress);
+        if(mailScore < 0 && practiceScore < 0)
         {
+            return 0.0;
         }
-    
-        public JaroWinkler(String s1, String s2)
+        else if(mailScore >= 0 && practiceScore >= 0)
         {
-            compOne = s1;
-            compTwo = s2;
+            return (mailScore + practiceScore) / 2;
         }
-    
-        public double getSimilarity(String s1, String s2)
+        else if(mailScore >= 0)
         {
-            compOne = s1;
-            compTwo = s2;
-    
-            mRange = Math.max(compOne.length(), compTwo.length()) / 2 - 1;
-    
-            double res = -1;
-            double cres = -1;
-    
-            //int m = getMatch();
-            int m = cameronsGetMatch();
-            if(m == 0)
-            {
-                return 0;
-            }
-            int t = 0;
-            if (getMissMatch(compTwo,compOne) > 0)
-            {
-                t = (getMissMatch(compOne,compTwo) / getMissMatch(compTwo,compOne));
-            }
-            int l1 = compOne.length();
-            int l2 = compTwo.length();
-    
-            double f = 0.3333;
-            double mt = (double)(m-t)/m;
-    
-            double one = (double)m/l1;
-            double two = (double)m/l2;
-            double three = (double)mt;
-    
-            double jw = f * ((double)m/l1+(double)m/l2+(double)mt);
-    
-
-            jw = (one + two + three) * f;
-            res = jw + getCommonPrefix(compOne,compTwo) * (0.1*(1.0 - jw));
-            //res = jw + ((getCommonPrefix(compOne,compTwo) * 0.1) * (1.0 - jw));
-            //res = jw;
-    
-            return res;
+            return mailScore;
         }
-    
-        private int cameronsGetMatch() {
-            int matches = 0;
-            char bad = '@';
-            StringBuilder check = new StringBuilder(compOne);
-            for (int i = 0; i < compOne.length(); i++) {
-                for (int j = 0; j < compTwo.length(); j++) {
-                    if (compOne.charAt(i) == compTwo.charAt(j)
-                && j-i <= mRange
-                && check.charAt(i) != bad) {
-                        check.setCharAt(i, bad);
-                        matches++;
-                    }
-                }    
-            }
-            return matches;
-        }
-    
-        private int getMissMatch(String s1, String s2)
+        else
         {
-            int transPositions = 0;
-    
-            for (int i = 0; i < theMatchA.length(); i++)
-            {
-                //Look Backward
-                int counter = 0;
-                while(counter <= mRange && i >= 0 && counter <= i)
-                {
-                    if (theMatchA.charAt(i) == theMatchB.charAt(i - counter) && counter > 0)
-                    {
-                        transPositions++;
-                    }
-                    counter++;
-                }
-    
-                //Look forward
-                counter = 1;
-                while(counter <= mRange && i < theMatchB.length() && (counter + i) < theMatchB.length())
-                {
-                    if (theMatchA.charAt(i) == theMatchB.charAt(i + counter) && counter > 0)
-                    {
-                        transPositions++;
-                    }
-                counter++;
-                }
-            }
-            return transPositions;
-        }
-    
-        private int getCommonPrefix(String compOne, String compTwo)
-        {
-            int cp = 0;
-            for (int i = 0; i < 4 && i < compOne.length()-1 && i < compTwo.length()-1; i++)
-            {
-                if (compOne.charAt(i) == compTwo.charAt(i)) cp++;
-            }
-            return cp;
+            return practiceScore;
         }
     }
 
+    private double match(Address a1, Address a2)
+    {
+        String[] u = new String[2], s = new String[2];
+        double score = 0.0;
+
+        if(a1.country.trim().toUpperCase().equals("NULL") &&
+                a1.county.trim().toUpperCase().equals("NULL") &&
+                a1.zip_code.trim().toUpperCase().equals("NULL") &&
+                a1.region.trim().toUpperCase().equals("NULL") &&
+                a1.city.trim().toUpperCase().equals("NULL") &&
+                a1.unit.trim().toUpperCase().equals("NULL") &&
+                a1.street.trim().toUpperCase().equals("NULL"))
+        {
+            score = -1.0;
+        }
+        else if (a1.country.trim().toUpperCase().equals("NULL") &&
+                a1.county.trim().toUpperCase().equals("NULL") &&
+                a1.zip_code.trim().toUpperCase().equals("NULL") &&
+                a1.region.trim().toUpperCase().equals("NULL") &&
+                a1.city.trim().toUpperCase().equals("NULL") &&
+                a1.unit.trim().toUpperCase().equals("NULL") &&
+                a1.street.trim().toUpperCase().equals("NULL"))
+        {
+            score = -1.0;
+        }
+        else if(a1.country.trim().toUpperCase().equals("NULL") || a2.country.trim().toUpperCase().equals("NULL") ||
+                a1.country.trim().toUpperCase().equals(a2.country.trim().toUpperCase()))
+        {
+            if((a1.county.trim().toUpperCase().equals("NULL") || a2.county.trim().toUpperCase().equals("NULL") ||
+                    a1.county.trim().toUpperCase().equals(a2.county.trim().toUpperCase())))
+            {
+                if((a1.zip_code.trim().toUpperCase().equals("NULL") || a2.zip_code.trim().toUpperCase().equals("NULL") ||
+                        a1.zip_code.trim().toUpperCase().equals(a2.zip_code.trim().toUpperCase())))
+                {
+                    if((a1.zip_code.trim().toUpperCase().equals("NULL") || a2.zip_code.trim().toUpperCase().equals("NULL") ||
+                            a1.zip_code.trim().toUpperCase().equals(a2.zip_code.trim().toUpperCase())))
+                    {
+                        if((a1.region.trim().toUpperCase().equals("NULL") || a2.region.trim().toUpperCase().equals("NULL") ||
+                                a1.region.trim().toUpperCase().equals(a2.region.trim().toUpperCase())))
+                        {
+                            if((a1.city.trim().toUpperCase().equals("NULL") || a2.city.trim().toUpperCase().equals("NULL") ||
+                                    a1.city.trim().toUpperCase().equals(a2.city.trim().toUpperCase())))
+                            {
+                                u[0] = a1.unit.trim().toUpperCase();
+                                u[1] = a2.unit.trim().toUpperCase();
+                                for(int i = 0; i < 2; i++)
+                                {
+                                    for(int j = 0; j < IgnoreTable.length; j++)
+                                    {
+                                        if(u[i].contains(IgnoreTable[j]))
+                                        {
+                                            u[i] = u[i].replace(IgnoreTable[j],"");
+                                        }
+                                    }
+                                }
+                                // System.out.println("Source 1: " + u[0] + " Source 2: " + u[1]);
+                                if(u[0].trim().toUpperCase().equals(u[1].trim().toUpperCase()))
+                                {
+                                    if(!a1.street.trim().toUpperCase().equals("NULL") && !a2.street.trim().toUpperCase().equals("NULL"))
+                                    {
+                                        s[0] = a1.street.trim().toUpperCase();
+                                        s[1] = a2.street.trim().toUpperCase();
+                                        for(int i = 0; i < 2; i++)
+                                        {
+                                            for(int j = 0; j < StreetTable.length; j++)
+                                            {
+                                                if(s[i].contains(StreetTable[j]))
+                                                {
+                                                    s[i] = s[i].replace(StreetTable[j],"");
+                                                }
+                                            }
+                                        }
+                                        if(s[0].trim().toUpperCase().equals(s[1].trim().toUpperCase()))
+                                        {
+                                            score = 1.0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return score;
+    }
 }
