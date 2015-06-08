@@ -67,8 +67,8 @@ public class MatchMaker
 
 
 
-        File MastersFile = new File("FullTest/Masters_Katzenjammers.txt");
-        File CrosswalkFile = new File("FullTest/Crosswalk_Katzenjammers.txt");
+        File MastersFile = new File("FullTest/Mac_Mini_Masters_Katzenjammers.txt");
+        File CrosswalkFile = new File("FullTest/Mac_Mini_Crosswalk_Katzenjammers.txt");
         FileWriter mastersWriter, crosswalkWriter;
         try {
             mastersWriter = new FileWriter(MastersFile, false);
