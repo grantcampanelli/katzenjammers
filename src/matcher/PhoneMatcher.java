@@ -29,6 +29,9 @@ public class PhoneMatcher implements Matcher
         double score = 0.0;
         String p1 = s1.phone, p2 = s2.phone;
         int diff = 0;
+        if(p1 == null || p2 == null)
+            return 0;
+
         if(p1.length() != PhoneLength || p2.length() != PhoneLength)
         {
             return score;

@@ -1,11 +1,13 @@
 import matcher.NameMatcher;
 import matcher.PhoneMatcher;
+import model.Master;
 import model.Score;
 import model.Source;
 import model.Specialties;
 
+
 import java.io.File;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Mitch Fierro on 5/31/2015.
@@ -22,7 +24,7 @@ public class MatchMaker
         Score score = new Score();
         MatchKeeper matchKeeper = MatchKeeper.getInstance();
 
-        List<Source> sources = Main.readInFromDatabase();
+        List<Source> sources = JDBCDeserialize.readInFromDatabase();
         System.out.println("HI");
 
         //match pairwise
@@ -50,5 +52,35 @@ public class MatchMaker
                 }
             }
         }
-    }
+
+
+        Map<Integer, Integer> crosswalk = new HashMap<Integer, Integer>();
+        crosswalk = MatchKeeper.getInstance().getCrossWalkMap();
+
+
+        List<Master> masterList = new ArrayList<Master>();
+        System.out.println("Starting to print masters");
+        masterList = MatchKeeper.getInstance().getMasters();
+        System.out.println("Master List length: "+masterList.size());
+
+        for(Master m : masterList) {
+            System.out.println("Master: ID:"+m.id);
+//        public String type;
+//        public String prefix;
+//        public String firstName;
+//        public String middleName;
+//        public String lastName;
+//        public String suffix;
+//        public String credential;
+//        public String gender;
+//        public String dob;
+//        public String isSole;
+//        public String phone;
+//        public String primarySpec;
+//        public String secondarySpec;
+        }
+
+        System.out.println("Done with printing masters");
+        }
+
 }
