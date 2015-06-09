@@ -62,6 +62,12 @@ create table Crosswalk(
 
 );
 
+create table Audit (
+  Source1	INT,
+  Source2	INT,
+  RuleID INT
+);
+
 --     FOREIGN KEY(master_id) REFERENCES Master(id),
 --     FOREIGN KEY(source_id) REFERENCES Source(source_id)
 -- );

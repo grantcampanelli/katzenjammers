@@ -80,6 +80,7 @@ public class MatchMaker
         File CrosswalkFile = new File(OutputDirectory+"Crosswalk_Katzenjammers.txt");
         File InsertCrosswalkFile = new File(OutputDirectory+"InsertCrosswalk.sql");
         File AuditFile = new File(OutputDirectory+"AuditTrail.txt");
+        File AuditFileSQL = new File(OutputDirectory+"InsertAuditTrail.sql");
         FileWriter mastersWriter, crosswalkWriter, insertMasterWriter, insertCrosswalkWriter;
         try {
             mastersWriter = new FileWriter(MastersFile, false);
@@ -199,6 +200,13 @@ public class MatchMaker
             sqlInsert.close();
             pw.close();
 
+            PrintWriter auditWriter = new PrintWriter(new FileWriter(AuditFile, false));
+            printAudit(auditWriter);
+            auditWriter.close();
+
+            auditWriter = new PrintWriter(new FileWriter(AuditFileSQL, false));
+            printAuditToSQL(auditWriter);
+            auditWriter.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -213,16 +221,6 @@ public class MatchMaker
         }*/
 
         JDBCDeserialize.ClearAndInsertIntoDBs();
-        try
-        {
-            PrintWriter auditWriter = new PrintWriter(new FileWriter(AuditFile, false));
-            printAudit(auditWriter);
-            auditWriter.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("writing audit file failed somehow");
-        }
     }
 
     public static void printAudit(PrintWriter out) {
@@ -233,6 +231,18 @@ public class MatchMaker
             out.print(entry.getKey().getKey()+"\t");
             out.print(entry.getKey().getValue()+"\t");
             out.print(entry.getValue()+"\n");
+        }
+    }
+
+    public static void printAuditToSQL(PrintWriter out) {
+        //out.print("Source1\tSource2\tRuleID\n");
+        Map<Map.Entry<Integer, Integer>, Integer> audit = MatchKeeper.getInstance()
+                .getAudit();
+        for(Map.Entry<Map.Entry<Integer, Integer>, Integer> entry : audit.entrySet()) {
+            out.print("INSERT INTO Audit VALUES(");
+            out.print(entry.getKey().getKey()+",");
+            out.print(entry.getKey().getValue()+",");
+            out.print(entry.getValue()+");\n");
         }
     }
 

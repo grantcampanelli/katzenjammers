@@ -41,10 +41,10 @@ public class JDBCDeserialize {
 
     public static String getOutputDirectory() {
         if(LimitSources == 1) {
-            return  "TestOutput/" + Integer.toString(NumSources) + "_";
+            return  "TestOutput/FINAL" + Integer.toString(NumSources) + "_";
         }
         else {
-            return "TestOutput/Full_Test_";
+            return "TestOutput/FINALFull_Test_";
         }
     }
 
@@ -339,8 +339,10 @@ public class JDBCDeserialize {
         String sql;
         String deleteMasters = "DELETE FROM Master";
         String deleteCrosswalk = "DELETE FROM Crosswalk";
+        String deleteAudit = "DELETE FROM Audit";
         String insertMasters =  getOutputDirectory()+"InsertMasters.sql";
         String insertCrosswalk =  getOutputDirectory()+"InsertCrosswalk.sql";
+        String insertAudit =  getOutputDirectory()+"InsertAuditTrail.sql";
         ResultSet rs;
 
         //File(OutputDirectory+"InsertMasters.sql");
@@ -352,10 +354,12 @@ public class JDBCDeserialize {
 
             stmt.executeUpdate(deleteMasters);
             stmt.executeUpdate(deleteCrosswalk);
+            stmt.executeUpdate(deleteAudit);
 
             ScriptRunner runner = new ScriptRunner(conn, false, true);
             runner.runScript(new BufferedReader(new FileReader(insertMasters)));
             runner.runScript(new BufferedReader(new FileReader(insertCrosswalk)));
+            runner.runScript(new BufferedReader(new FileReader(insertAudit)));
 
 
             //rs.close();
