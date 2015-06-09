@@ -64,7 +64,6 @@ public class MatchMaker
         System.out.println("Starting to print masters");
         masterList = MatchKeeper.getInstance().getMasters();
         System.out.println("Master List length: "+masterList.size());
-
         for(Master m : masterList) {
             System.out.println("Master: ID:"+m.id);
 //        public String type;
@@ -83,6 +82,7 @@ public class MatchMaker
         }
 
         System.out.println("Done with printing masters");
+        System.out.println("These are the rules that fired, causing the mappings above");
         for (String s : MatchKeeper.getInstance().getAllRuleDescriptions()) {
             System.out.println(s);
         }
