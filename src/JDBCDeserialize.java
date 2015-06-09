@@ -122,14 +122,14 @@ public class JDBCDeserialize {
                 source.add(s);
                 sourceMap.put(source_id, s);
 
-                /*
+
                 //Print out source array
-                System.out.println("source_id: "+source[index].id+" type: "+source[index].type+" name: "+
-                        source[index].name+" gender: "+source[index].gender+" dob: "+source[index].dob+
-                        " solProprieter: "+source[index].solProp+" phone: "+source[index].phone+
-                        " primarySpecialty: "+source[index].primarySpecialty+" secondarySpecialty: "+
-                        source[index].secondarySpecialty);
-                 */
+                System.out.println("source_id: "+s.id+" type: "+s.type+" name: "+
+                        s.name+" gender: "+s.gender+" dob: "+s.dob+
+                        " solProprieter: "+s.solProp+" phone: "+s.phone+
+                        " primarySpecialty: "+s.primarySpecialty+" secondarySpecialty: "+
+                        s.secondarySpecialty);
+
             }
 
             System.out.println("Done reading Source");

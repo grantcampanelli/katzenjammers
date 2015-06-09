@@ -28,7 +28,7 @@ public class MatchMaker
         MatchKeeper matchKeeper = MatchKeeper.getInstance();
 
         List<Source> sources = JDBCDeserialize.readInFromDatabase();
-        System.out.println("HI");
+        System.out.println("Start to Match");
 
         //match pairwise
         for (int curSource = 0; curSource < sources.size(); curSource++) {

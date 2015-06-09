@@ -19,7 +19,7 @@ public class MasterDecider
 
         String bestFirst = "", bestMiddle = "", bestLast = "";
         int maxFirstLength = 0, maxMiddleLength = 0, maxLastLength = 0;
-        String isSoleProprieter = "";
+        String isSoleProprieter = "X", bestPhoneNumber = null, bestGender = null;
 
         for (Source s : src) {
             String[] names = s.name.split("\"\\\\s+\"");
@@ -39,16 +39,24 @@ public class MasterDecider
                 bestLast = names[2];
             }
 
-            if (s.solProp == "Y") {
-                isSoleProprieter = "Y";
+            if(s.solProp != null) {
+                if (s.solProp.equals("Y")) {
+                    isSoleProprieter = "Y";
+                } else if (s.solProp.equals("N")) {
+                    isSoleProprieter = "N";
+                }
             }
-            else if (s.solProp == "N") {
-                isSoleProprieter = "N";
+
+            if(s.phone != null){
+                if(bestPhoneNumber == null)
+                    bestPhoneNumber = s.phone;
+            }
+
+            if(s.gender != null) {
+                bestGender = s.gender;
             }
         }
-        if (isSoleProprieter.equals("")) {
-            isSoleProprieter = "X";
-        }
+
         Master m = new Master();
         //currently returning a dummy master (partially correct).  Will need to fix this
         //these are the only fields correct for now
@@ -59,10 +67,10 @@ public class MasterDecider
         m.middleName = bestMiddle;
         m.lastName = bestLast;
 
-        m.gender = "M"; //all male for now
+        m.gender = bestGender; //all male for now
         m.credential = "MD"; ///all md for now
-        m.phone = "1111111111";
-        m.prefix = "Mr.";
+        m.phone = bestPhoneNumber;
+        m.prefix = "Mr";
         m.suffix = null;
         m.primarySpec = null;
         m.secondarySpec = null;
