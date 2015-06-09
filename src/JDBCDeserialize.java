@@ -23,17 +23,22 @@ public class JDBCDeserialize {
     public static Integer LimitSources = 0;
     public static Integer NumSources = 500;
 
-    public static void ReadNumSources() {
+    public static void ReadNumSources(Integer lim) {
         Scanner in = new Scanner(System.in);
 
+        if(lim == 1)  {
         System.out.println("How many sources would you like to limit to? Use 0 to set no limit");
         NumSources = in.nextInt();
         System.out.println("You chose "+ NumSources);
 
-        if(NumSources == 0)
+            if(NumSources == 0)
+                LimitSources = 0;
+            else
+                LimitSources = 1;
+        }
+        else {
             LimitSources = 0;
-        else
-            LimitSources = 1;
+        }
 
     }
 

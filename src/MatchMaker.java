@@ -15,7 +15,12 @@ public class MatchMaker
     public static String OutputDirectory;
 
     public static void main(String[] args) {
-        JDBCDeserialize.ReadNumSources();
+        if(args.length != 0)
+            JDBCDeserialize.ReadNumSources(0);
+            //System.out.println(args.length);
+        else
+            JDBCDeserialize.ReadNumSources(1);
+
         OutputDirectory = JDBCDeserialize.getOutputDirectory();
 
         List<Rule> rules = RuleParser.parseRules("rules.ini");
