@@ -19,7 +19,10 @@ public class MasterDecider
 
         String bestFirst = "", bestMiddle = "", bestLast = "";
         int maxFirstLength = 0, maxMiddleLength = 0, maxLastLength = 0;
-        String isSoleProprieter = "X", bestPhoneNumber = null, bestGender = null;
+        String isSoleProprieter = "X", bestPhoneNumber = null, bestGender = null,
+                bestType = null, bestPrefix = null, bestSuffix = null,
+                bestCredentials = null;
+        Integer bestPrimarySpecialty = null, bestSecondarySpecialty = null;
 
         for (Source s : src) {
             String[] names = s.name.split("\"\\\\s+\"");
@@ -55,6 +58,26 @@ public class MasterDecider
             if(s.gender != null) {
                 bestGender = s.gender;
             }
+
+            if(s.type != null) {
+                bestType = s.type;
+            }
+
+            if(s.primarySpecialty != null)
+                bestPrimarySpecialty = s.primarySpecialty;
+
+            if(s.secondarySpecialty != null)
+                bestSecondarySpecialty = s.secondarySpecialty;
+
+            if(s.prefix != null)
+                bestPrefix = s.prefix;
+
+            if(s.suffix != null)
+                bestSuffix = s.suffix;
+
+            if(s.medCredential != null)
+                bestCredentials = s.medCredential;
+
         }
 
         Master m = new Master();
@@ -68,13 +91,22 @@ public class MasterDecider
         m.lastName = bestLast;
 
         m.gender = bestGender; //all male for now
-        m.credential = "MD"; ///all md for now
+        m.credential = bestCredentials; ///all md for now
         m.phone = bestPhoneNumber;
-        m.prefix = "Mr";
-        m.suffix = null;
-        m.primarySpec = null;
-        m.secondarySpec = null;
-        m.type = "IND"; //all ind for now. obviously need to change
+
+        m.prefix = bestPrefix;
+        m.suffix = bestSuffix;
+
+        if(bestPrimarySpecialty != null)
+            m.primarySpec = Integer.toString(bestPrimarySpecialty);
+        else
+            m.primarySpec = null;
+
+        if(bestSecondarySpecialty != null)
+            m.secondarySpec = Integer.toString(bestSecondarySpecialty);
+        else
+            m.secondarySpec = null;
+        m.type = bestType; //all ind for now. obviously need to change
 
         return m;
     }

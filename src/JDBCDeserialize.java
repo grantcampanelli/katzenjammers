@@ -51,7 +51,7 @@ public class JDBCDeserialize {
         Statement stmt = null;
         String type, name, gender, phone, street, unit,
                 city, region, zip_code, county, country, is_sole_proprieter, primary,
-                title, code, website;
+                title, code, website, prefix, suffix, medCredential;
         Date dob;
         Integer source_id, parentId, specialtyId, primarySpecialty = null, secondarySpecialty = null;
         Integer numTuplesSpecialties = 0, numTuplesSource = 0, numTuplesAddress = 0, index = 0;
@@ -96,7 +96,10 @@ public class JDBCDeserialize {
                 // read in source to variables
                 source_id = rs.getInt("source_id");
                 type = rs.getString("type");
+                prefix = rs.getString("name_prefix");
                 name = rs.getString("name");
+                suffix = rs.getString("name_suffix");
+                medCredential = rs.getString("medical_credential");
                 gender = rs.getString("gender");
                 dob = rs.getDate("dob");
                 is_sole_proprieter = rs.getString("is_sole_proprieter");
@@ -116,19 +119,19 @@ public class JDBCDeserialize {
 
                 // create new source object and add to array
                 //source[index]
-                Source s = new Source(source_id, type, name, gender, dob,
-                        is_sole_proprieter,
+                Source s = new Source(source_id, type, prefix, name,suffix, medCredential,
+                        gender, dob, is_sole_proprieter,
                         phone, primarySpecialty, secondarySpecialty);
                 source.add(s);
                 sourceMap.put(source_id, s);
 
 
                 //Print out source array
-                System.out.println("source_id: "+s.id+" type: "+s.type+" name: "+
-                        s.name+" gender: "+s.gender+" dob: "+s.dob+
-                        " solProprieter: "+s.solProp+" phone: "+s.phone+
-                        " primarySpecialty: "+s.primarySpecialty+" secondarySpecialty: "+
-                        s.secondarySpecialty);
+//                System.out.println("source_id: "+s.id+" type: "+s.type+" name: "+
+//                        s.name+" gender: "+s.gender+" dob: "+s.dob+
+//                        " solProprieter: "+s.solProp+" phone: "+s.phone+
+//                        " primarySpecialty: "+s.primarySpecialty+" secondarySpecialty: "+
+//                        s.secondarySpecialty);
 
             }
 
