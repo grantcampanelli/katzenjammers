@@ -217,6 +217,7 @@ public class MatchMaker
         {
             PrintWriter auditWriter = new PrintWriter(new FileWriter(AuditFile, false));
             printAudit(auditWriter);
+            auditWriter.close();
         }
         catch (Exception e) {
             e.printStackTrace();
