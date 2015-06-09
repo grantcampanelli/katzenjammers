@@ -140,7 +140,6 @@ public class MatchMaker
                 printStringToSql(sqlInsert, m.middleName, ",");
                 printStringToSql(sqlInsert, m.lastName, ",");
                 printStringToSql(sqlInsert, m.suffix, ",");
-                System.out.println(m.credential);
                 printStringToSql(sqlInsert, m.credential, ",");
                 printStringToSql(sqlInsert, m.gender, ",");
                 printStringToSql(sqlInsert, m.dob, ",");
