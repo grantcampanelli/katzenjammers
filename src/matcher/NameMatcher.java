@@ -46,14 +46,23 @@ public class NameMatcher implements Matcher
             return MATCH;
         }
         //if the edit distance is signifigant but jw value is high, it still might be a match
-        if(lev > 3 && jwret > 90) {
+        if(lev > 3 && jwret > .91) {
             return MAYBE_MATCH;
         }
         //if there is 1 character wrong return a strong match
         if(lev == 1) {
             return STRONG_MATCH;
         }
-        if(jwret > 92) {
+        //Handles two cases.
+        //CASE 1: names are almost the same, but there is Single transposition
+        //CASE 2: The first and last name are the same but one of the names contains a
+        // middle innitial.
+        //In either case, the levenstien distance is 2.
+        if(lev == 2 && jwret > .95) {
+            return STRONG_MATCH;
+        }
+        //if the names look sort of similar, there is a slight chance its a match
+        if(jwret > .92) {
             return WEAK_MATCH;
         }
         return NO_MATCH;
