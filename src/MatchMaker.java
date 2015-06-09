@@ -78,11 +78,15 @@ public class MatchMaker
 
 
         File MastersFile = new File(OutputDirectory+"Masters_Katzenjammers.txt");
+        File InsertMastersFile = new File(OutputDirectory+"InsertMasters.sql");
         File CrosswalkFile = new File(OutputDirectory+"Crosswalk_Katzenjammers.txt");
-        FileWriter mastersWriter, crosswalkWriter;
+        FileWriter mastersWriter, crosswalkWriter, insertMasterWriter;
         try {
             mastersWriter = new FileWriter(MastersFile, false);
             PrintWriter pw = new PrintWriter(mastersWriter);
+
+            insertMasterWriter = new FileWriter(InsertMastersFile, false);
+            PrintWriter sqlInsert = new PrintWriter(insertMasterWriter);
 
             printMastersColumns(pw);
 
@@ -102,22 +106,53 @@ public class MatchMaker
                 printStringItem(pw, m.primarySpec, "\t");
                 printStringItem(pw, m.secondarySpec, "\n");
 
-                printIntegerItemToConsole(m.id, "\t");
-                printStringItemToConsole(m.type, "\t");
-                printStringItemToConsole(m.prefix, "\t");
-                printStringItemToConsole(m.firstName, "\t");
-                printStringItemToConsole(m.middleName, "\t");
-                printStringItemToConsole(m.lastName, "\t");
-                printStringItemToConsole(m.suffix, "\t");
-                printStringItemToConsole(m.credential, "\t");
-                printStringItemToConsole(m.gender, "\t");
-                printStringItemToConsole(m.dob, "\t");
-                printStringItemToConsole(m.isSole, "\t");
-                printStringItemToConsole(m.phone, "\t");
-                printStringItemToConsole(m.primarySpec, "\t");
-                printStringItemToConsole(m.secondarySpec, "\n");
+                sqlInsert.print("INSERT INTO Master VALUES(");
+                printIntegerToSql(sqlInsert, m.id, ",");
+                printStringToSql(sqlInsert, m.type, ",");
+                printStringToSql(sqlInsert, m.prefix, ",");
+                printStringToSql(sqlInsert, m.firstName, ",");
+                printStringToSql(sqlInsert, m.middleName, ",");
+                printStringToSql(sqlInsert, m.lastName, ",");
+                printStringToSql(sqlInsert, m.suffix, ",");
+                System.out.println(m.credential);
+                printStringToSql(sqlInsert, m.credential, ",");
+                printStringToSql(sqlInsert, m.gender, ",");
+                printStringToSql(sqlInsert, m.dob, ",");
+                printStringToSql(sqlInsert, m.isSole, ",");
+                printStringToSql(sqlInsert, m.phone, ",");
+
+                if(m.primarySpec != null)
+                    printIntegerToSql(sqlInsert, Integer.parseInt(m.primarySpec), ",");
+                else
+                    printStringToSql(sqlInsert, null, ",");
+
+                if(m.secondarySpec != null)
+                    printIntegerToSql(sqlInsert, Integer.parseInt(m.secondarySpec), "");
+                else
+                    printStringToSql(sqlInsert, null, "");
+
+                sqlInsert.print(");\n");
+
+                //INSERT INTO Source VALUES(24614,"IND",NULL,"Christina L Grant",NULL,NULL,"F",NULL,"N",NULL,7558,NULL);
+                //INSER
+//                printIntegerItemToConsole(m.id, "\t");
+//                printStringItemToConsole(m.type, "\t");
+//                printStringItemToConsole(m.prefix, "\t");
+//                printStringItemToConsole(m.firstName, "\t");
+//                printStringItemToConsole(m.middleName, "\t");
+//                printStringItemToConsole(m.lastName, "\t");
+//                printStringItemToConsole(m.suffix, "\t");
+//                printStringItemToConsole(m.credential, "\t");
+//                printStringItemToConsole(m.gender, "\t");
+//                printStringItemToConsole(m.dob, "\t");
+//                printStringItemToConsole(m.isSole, "\t");
+//                printStringItemToConsole(m.phone, "\t");
+//                printStringItemToConsole(m.primarySpec, "\t");
+//                printStringItemToConsole(m.secondarySpec, "\n");
             }
             pw.close();
+
+            sqlInsert.close();
 
             crosswalkWriter = new FileWriter(CrosswalkFile, false);
             pw = new PrintWriter(crosswalkWriter);
@@ -147,6 +182,24 @@ public class MatchMaker
             System.out.println(s);
         }
     }
+
+    public static void printIntegerToSql(PrintWriter sqlInsert, Integer item, String delimiter) {
+        if(item != null)
+            sqlInsert.print(item+delimiter);
+        else
+            sqlInsert.print("NULL"+delimiter);
+
+    }
+
+    public static void printStringToSql(PrintWriter sqlInsert, String item, String delimiter) {
+        if(item == null)
+            sqlInsert.print("NULL"+delimiter);
+        else if(item.length() == 0)
+            sqlInsert.print("NULL"+delimiter);
+        else
+            sqlInsert.print('"'+item+'"'+delimiter);
+    }
+
 
     public static void printMastersColumns(PrintWriter pw) {
         pw.print("Master Id\t");

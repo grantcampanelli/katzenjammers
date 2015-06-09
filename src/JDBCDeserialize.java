@@ -124,8 +124,8 @@ public class JDBCDeserialize {
 
                 // create new source object and add to array
                 //source[index]
-                Source s = new Source(source_id, type, prefix, name,suffix, medCredential,
-                        gender, dob, is_sole_proprieter,
+                Source s = new Source(source_id, type, prefix, name, suffix, medCredential, gender,
+                        dob, is_sole_proprieter,
                         phone, primarySpecialty, secondarySpecialty);
                 source.add(s);
                 sourceMap.put(source_id, s);
