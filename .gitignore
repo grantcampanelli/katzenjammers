@@ -55,4 +55,4 @@ crashlytics-build.properties
 
 
 #jar build
-/src/META-INF/MANIFEST.MF
+/src/META-INF/

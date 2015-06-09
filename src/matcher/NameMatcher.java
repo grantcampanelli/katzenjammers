@@ -49,7 +49,7 @@ public class NameMatcher implements Matcher
         if(lev > 3 && jwret > 90) {
             return MAYBE_MATCH;
         }
-
+        //if there is 1 character wrong return a strong match
         if(lev == 1) {
             return STRONG_MATCH;
         }
