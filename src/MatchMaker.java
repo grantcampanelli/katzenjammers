@@ -79,6 +79,7 @@ public class MatchMaker
         File InsertMastersFile = new File(OutputDirectory+"InsertMasters.sql");
         File CrosswalkFile = new File(OutputDirectory+"Crosswalk_Katzenjammers.txt");
         File InsertCrosswalkFile = new File(OutputDirectory+"InsertCrosswalk.sql");
+        File AuditFile = new File(OutputDirectory+"AuditTrail.txt");
         FileWriter mastersWriter, crosswalkWriter, insertMasterWriter, insertCrosswalkWriter;
         try {
             mastersWriter = new FileWriter(MastersFile, false);
@@ -207,11 +208,31 @@ public class MatchMaker
 
         System.out.println("Done with printing masters");
         System.out.println("These are the rules that fired, causing the mappings above");
-        for (String s : MatchKeeper.getInstance().getAllRuleDescriptions()) {
+        /*for (String s : MatchKeeper.getInstance().getAllRuleDescriptions()) {
             System.out.println(s);
-        }
+        }*/
 
         JDBCDeserialize.ClearAndInsertIntoDBs();
+        try
+        {
+            PrintWriter auditWriter = new PrintWriter(new FileWriter(AuditFile, false));
+            printAudit(auditWriter);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("writing audit file failed somehow");
+        }
+    }
+
+    public static void printAudit(PrintWriter out) {
+        out.print("Source1\tSource2\tRuleID\n");
+        Map<Map.Entry<Integer, Integer>, Integer> audit = MatchKeeper.getInstance()
+            .getAudit();
+        for(Map.Entry<Map.Entry<Integer, Integer>, Integer> entry : audit.entrySet()) {
+            out.print(entry.getKey().getKey()+"\t");
+            out.print(entry.getKey().getValue()+"\t");
+            out.print(entry.getValue()+"\n");
+        }
     }
 
 

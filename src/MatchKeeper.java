@@ -14,8 +14,8 @@ public class MatchKeeper
     //maps source ID's to Master Id's
     private Map<Integer, Integer> map = new HashMap<Integer, Integer>();   // cross walk - source to master
     private Map<Integer, Set<Source>> listMap = new HashMap<Integer, Set<Source>>(); // maps master ID to set of sources
-    private Map<Map.Entry<Integer, Integer>, String> auditMap = new HashMap<Map
-        .Entry<Integer, Integer>, String>();
+    private Map<Map.Entry<Integer, Integer>, Integer> auditMap = new HashMap<Map
+        .Entry<Integer, Integer>, Integer>();
     private static MatchKeeper instance = null;
 
     private MatchKeeper() {
@@ -65,7 +65,7 @@ public class MatchKeeper
         listMap.get(masterId).add(source1);
         listMap.get(masterId).add(source2);
         auditMap.put(new AbstractMap.SimpleEntry<Integer, Integer>(source1.id,
-            source2.id), why.description);
+            source2.id), why.id);
     }
 
     /**
@@ -82,11 +82,15 @@ public class MatchKeeper
         return masterList;
     }
 
+    public Map<Map.Entry<Integer, Integer>, Integer> getAudit() {
+        return auditMap;
+    }
+
     public Map<Integer, Integer> getCrossWalkMap() {
         return map;
     }
 
-    public Set<String> getAllRuleDescriptions() {
+    /*public Set<Integer> getAllRuleDescriptions() {
         return new HashSet<String>(auditMap.values());
-    }
+    }*/
 }

@@ -16,6 +16,8 @@ public class MasterDecider
         Map<String, Integer> suffixMap = new HashMap <String, Integer>();
         Map<String, Integer> credentialMap = new HashMap <String, Integer>();
         Map<String, Integer> phoneMap = new HashMap <String, Integer>();
+        Map<Integer, Integer> primarySpecMap = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> secondarySpecMap = new HashMap<Integer, Integer>();
 
         String bestFirst = "", bestMiddle = "", bestLast = "";
         int maxFirstLength = 0, maxMiddleLength = 0, maxLastLength = 0;
@@ -23,6 +25,9 @@ public class MasterDecider
                 bestType = null, bestPrefix = null, bestSuffix = null,
                 bestCredentials = null;
         Integer bestPrimarySpecialty = null, bestSecondarySpecialty = null;
+
+        Integer maxPrimarySpec = 0, maxSecondarySpec = 0, maxSuffix = 0, maxPrefix = 0,
+            maxCred = 0, maxPhone = 0;
 
         for (Source s : src) {
             String[] names = s.name.split("\"\\\\s+\"");
@@ -49,35 +54,79 @@ public class MasterDecider
                     isSoleProprieter = "N";
                 }
             }
-
-            if(s.phone != null){
-                if(bestPhoneNumber == null)
+            //master phones
+            if (s.phone != null && phoneMap.get(s.phone) == null) {
+                phoneMap.put(s.phone, 0);
+            }
+            if (s.phone != null) {
+                phoneMap.put(s.phone, phoneMap.get(s.phone) + 1);
+                if (phoneMap.get(s.phone) > maxPhone)
                     bestPhoneNumber = s.phone;
             }
-
+            //pick last gender lol
             if(s.gender != null) {
                 bestGender = s.gender;
             }
-
+            //all types guaranteed to be the same
             if(s.type != null) {
                 bestType = s.type;
             }
+            //master primary specs
+            if (s.primarySpecialty != null && primarySpecMap.get(s.primarySpecialty) == null) {
+                primarySpecMap.put(s.primarySpecialty, 0);
+            }
+            if (s.primarySpecialty != null)
+            {
+                primarySpecMap.put(s.primarySpecialty, primarySpecMap.get(s.primarySpecialty) + 1);
+                if (primarySpecMap.get(s.primarySpecialty) > maxPrimarySpec)
+                    bestPrimarySpecialty = s.primarySpecialty;
 
-            if(s.primarySpecialty != null)
-                bestPrimarySpecialty = s.primarySpecialty;
+            }
+            //amster secondary specs
+            if (s.secondarySpecialty != null && secondarySpecMap.get(s.secondarySpecialty) == null) {
+                secondarySpecMap.put(s.secondarySpecialty, 0);
+            }
+            if (s.secondarySpecialty != null)
+            {
+                secondarySpecMap.put(s.secondarySpecialty, secondarySpecMap.get(s.secondarySpecialty) + 1);
+                if (secondarySpecMap.get(s.secondarySpecialty) > maxSecondarySpec)
+                    bestSecondarySpecialty = s.secondarySpecialty;
+            }
 
-            if(s.secondarySpecialty != null)
-                bestSecondarySpecialty = s.secondarySpecialty;
+            //master prefixs
+            if (s.prefix != null && prefixMap.get(s.prefix) == null) {
+                prefixMap.put(s.prefix, 0);
+            }
+            if (s.prefix != null) {
+                prefixMap.put(s.prefix, prefixMap.get(s.prefix) + 1);
+                if (prefixMap.get(s.prefix) > maxPrefix)
+                    bestPrefix = s.prefix;
+            }
+            //master suffixs
+            if (s.suffix != null && suffixMap.get(s.suffix) == null) {
+                suffixMap.put(s.suffix, 0);
+            }
+            if (s.suffix != null)
+            {
+                suffixMap.put(s.suffix, suffixMap.get(s.suffix) + 1);
+                if (suffixMap.get(s.suffix) > maxSuffix)
+                    bestSuffix = s.suffix;
+            }
 
-            if(s.prefix != null)
-                bestPrefix = s.prefix;
+            //master medccreds
+            if (s.medCredential != null && credentialMap.get(s.medCredential) == null) {
+                credentialMap.put(s.medCredential, 0);
+            }
+            if (s.medCredential != null)
+            {
+                credentialMap.put(s.medCredential, credentialMap.get(s.medCredential) + 1);
+                if (credentialMap.get(s.medCredential) > maxCred)
+                    bestCredentials = s.medCredential;
+            }
 
-            if(s.suffix != null)
-                bestSuffix = s.suffix;
-
-            if(s.medCredential != null)
-                bestCredentials = s.medCredential;
-
+        }
+        if (isSoleProprieter == "") {
+            isSoleProprieter = "X";
         }
 
         Master m = new Master();

@@ -8,9 +8,10 @@ public class Rule
     String description;
     Double[] weights;
     double threshold;
+    int id;
 
     public Rule(double nameWeight, double phoneWeight, double addressWeight,
-                double specialtyWeight, double threshold, String description) {
+                double specialtyWeight, double threshold, String description, int id) {
         weights = new Double[4];
         weights[0] = nameWeight;
         weights[1] = phoneWeight;
@@ -19,6 +20,7 @@ public class Rule
 
         this.threshold = threshold;
         this.description = description;
+        this.id = id;
     }
 
 
