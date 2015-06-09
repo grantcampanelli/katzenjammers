@@ -43,7 +43,7 @@ public class PhoneMatcher implements Matcher
                 diff++;
             }
         }
-        System.out.println("Difference: " + diff);
+        //System.out.println("Difference: " + diff);
         if(diff <= 3)
         {
             score = (double)(PhoneLength - diff) / PhoneLength;

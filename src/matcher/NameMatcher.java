@@ -9,6 +9,12 @@ import java.util.Scanner;
 public class NameMatcher implements Matcher
 {
     private static NameMatcher instance = null;
+    public static final double MATCH = 1.0;
+    public static final double STRONG_MATCH = 0.75;
+    public static final double MAYBE_MATCH = 0.5;
+    public static final double WEAK_MATCH = 0.25;
+    public static final double NO_MATCH = 0.0;
+
 
     private NameMatcher() {
     }
@@ -36,8 +42,30 @@ public class NameMatcher implements Matcher
         JaroWinkler jw = new JaroWinkler(s1, s2);
         jwret = jw.getSimilarity(s1, s2);
         lev = LevenshteinDistance.distance(s1, s2);
-        ret = lev * jwret;// normalize this
-        return ret;
+        if(lev == 0) {
+            return MATCH;
+        }
+        //if the edit distance is signifigant but jw value is high, it still might be a match
+        if(lev > 3 && jwret > .91) {
+            return MAYBE_MATCH;
+        }
+        //if there is 1 character wrong return a strong match
+        if(lev == 1) {
+            return STRONG_MATCH;
+        }
+        //Handles two cases.
+        //CASE 1: names are almost the same, but there is Single transposition
+        //CASE 2: The first and last name are the same but one of the names contains a
+        // middle innitial.
+        //In either case, the levenstien distance is 2.
+        if(lev == 2 && jwret > .95) {
+            return STRONG_MATCH;
+        }
+        //if the names look sort of similar, there is a slight chance its a match
+        if(jwret > .92) {
+            return WEAK_MATCH;
+        }
+        return NO_MATCH;
     }
 
     public static class LevenshteinDistance {
@@ -63,6 +91,11 @@ public class NameMatcher implements Matcher
         }    
     }
 
+    //JaroWinkler
+//CREDITS: http://blogs.ucl.ac.uk/chime/2010/06/28/java-example-code-of-common-similarity-algorithms-used-in-data-mining/
+//Made less broken by Cameron
+//THIS CLASS DOESN"T LIKE WHEN the second argument is shorter or when it gets empty strings so the order of arguments
+    //is swaped if necessary before it is called.
     public class JaroWinkler
     {
         private String compOne;
@@ -91,7 +124,7 @@ public class NameMatcher implements Matcher
     
             double res = -1;
     
-            int m = getMatch();
+            int m = cameronsGetMatch();
             if(m == 0)
             {
                 return 0;
@@ -111,41 +144,18 @@ public class NameMatcher implements Matcher
     
             return res;
         }
-    
-        private int getMatch()
-        {
-    
-            theMatchA = "";
-            theMatchB = "";
-    
+        private int cameronsGetMatch() {
             int matches = 0;
-    
-            for (int i = 0; i < compOne.length(); i++)
-            {
-                //Look backward
-                int counter = 0;
-                while(counter <= mRange && i >= 0 && counter <= i)
-                {
-                    if (compOne.charAt(i) == compTwo.charAt(i - counter))
-                    {
+            char bad = '@';
+            StringBuilder check = new StringBuilder(compOne);
+            for (int i = 0; i < compOne.length(); i++) {
+                for (int j = 0; j < compTwo.length(); j++) {
+                    if (compOne.charAt(i) == compTwo.charAt(j)
+                            && j-i <= mRange
+                            && check.charAt(i) != bad) {
+                        check.setCharAt(i, bad);
                         matches++;
-                        theMatchA = theMatchA + compOne.charAt(i);
-                        theMatchB = theMatchB + compTwo.charAt(i);
                     }
-                    counter++;
-                }
-    
-                //Look forward
-                counter = 1;
-                while(counter <= mRange && i < compTwo.length() && counter + i < compTwo.length())
-                {
-                    if (compOne.charAt(i) == compTwo.charAt(i + counter))
-                    {
-                        matches++;
-                        theMatchA = theMatchA + compOne.charAt(i);
-                        theMatchB = theMatchB + compTwo.charAt(i);
-                    }
-                    counter++;
                 }
             }
             return matches;

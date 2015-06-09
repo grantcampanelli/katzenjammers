@@ -19,7 +19,10 @@ public class MasterDecider
 
         String bestFirst = "", bestMiddle = "", bestLast = "";
         int maxFirstLength = 0, maxMiddleLength = 0, maxLastLength = 0;
-        String isSoleProprieter = "";
+        String isSoleProprieter = "X", bestPhoneNumber = null, bestGender = null,
+                bestType = null, bestPrefix = null, bestSuffix = null,
+                bestCredentials = null;
+        Integer bestPrimarySpecialty = null, bestSecondarySpecialty = null;
 
         for (Source s : src) {
             String[] names = s.name.split("\"\\\\s+\"");
@@ -39,16 +42,44 @@ public class MasterDecider
                 bestLast = names[2];
             }
 
-            if (s.solProp == "Y") {
-                isSoleProprieter = "Y";
+            if(s.solProp != null) {
+                if (s.solProp.equals("Y")) {
+                    isSoleProprieter = "Y";
+                } else if (s.solProp.equals("N")) {
+                    isSoleProprieter = "N";
+                }
             }
-            else if (s.solProp == "N") {
-                isSoleProprieter = "N";
+
+            if(s.phone != null){
+                if(bestPhoneNumber == null)
+                    bestPhoneNumber = s.phone;
             }
+
+            if(s.gender != null) {
+                bestGender = s.gender;
+            }
+
+            if(s.type != null) {
+                bestType = s.type;
+            }
+
+            if(s.primarySpecialty != null)
+                bestPrimarySpecialty = s.primarySpecialty;
+
+            if(s.secondarySpecialty != null)
+                bestSecondarySpecialty = s.secondarySpecialty;
+
+            if(s.prefix != null)
+                bestPrefix = s.prefix;
+
+            if(s.suffix != null)
+                bestSuffix = s.suffix;
+
+            if(s.medCredential != null)
+                bestCredentials = s.medCredential;
+
         }
-        if (isSoleProprieter.equals("")) {
-            isSoleProprieter = "X";
-        }
+
         Master m = new Master();
         //currently returning a dummy master (partially correct).  Will need to fix this
         //these are the only fields correct for now
@@ -59,14 +90,23 @@ public class MasterDecider
         m.middleName = bestMiddle;
         m.lastName = bestLast;
 
-        m.gender = "M"; //all male for now
-        m.credential = "MD"; ///all md for now
-        m.phone = "1111111111";
-        m.prefix = "Mr.";
-        m.suffix = null;
-        m.primarySpec = null;
-        m.secondarySpec = null;
-        m.type = "IND"; //all ind for now. obviously need to change
+        m.gender = bestGender; //all male for now
+        m.credential = bestCredentials; ///all md for now
+        m.phone = bestPhoneNumber;
+
+        m.prefix = bestPrefix;
+        m.suffix = bestSuffix;
+
+        if(bestPrimarySpecialty != null)
+            m.primarySpec = Integer.toString(bestPrimarySpecialty);
+        else
+            m.primarySpec = null;
+
+        if(bestSecondarySpecialty != null)
+            m.secondarySpec = Integer.toString(bestSecondarySpecialty);
+        else
+            m.secondarySpec = null;
+        m.type = bestType; //all ind for now. obviously need to change
 
         return m;
     }
