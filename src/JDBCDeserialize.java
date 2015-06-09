@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -335,5 +332,65 @@ public class JDBCDeserialize {
             pw.print(item + delimiter);
         }
     }
+
+    public static void ClearAndInsertIntoDBs() {
+        Connection conn = null;
+        Statement stmt = null;
+        String sql;
+        String deleteMasters = "DELETE FROM Master";
+        String deleteCrosswalk = "DELETE FROM Crosswalk";
+        String insertMasters =  getOutputDirectory()+"InsertMasters.sql";
+        String insertCrosswalk =  getOutputDirectory()+"InsertCrosswalk.sql";
+        ResultSet rs;
+
+        //File(OutputDirectory+"InsertMasters.sql");
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/Katzenjammers", "cpe366", "Soccer57");
+            stmt = conn.createStatement();
+
+            stmt.executeUpdate(deleteMasters);
+            stmt.executeUpdate(deleteCrosswalk);
+
+            ScriptRunner runner = new ScriptRunner(conn, false, true);
+            runner.runScript(new BufferedReader(new FileReader(insertMasters)));
+            runner.runScript(new BufferedReader(new FileReader(insertCrosswalk)));
+
+
+            //rs.close();
+            stmt.close();
+            conn.close();
+
+
+
+        } catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (SQLException se2) {
+            }// nothing we can do
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }//end finally try
+        }//end try
+
+        return;
+
+
+
+    }
+
+
 
 }

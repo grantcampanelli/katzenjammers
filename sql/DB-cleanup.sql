@@ -1,7 +1,4 @@
-DROP TABLE Audit;
-DROP TABLE Mastered_Specialties;
-DROP TABLE Mastered_Address;
-DROP TABLE Mastered_Phones;
+DROP TABLE Crosswalk;
 DROP TABLE Master;
 DROP TABLE Address;
 DROP TABLE Source;

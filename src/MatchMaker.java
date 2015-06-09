@@ -211,7 +211,11 @@ public class MatchMaker
         for (String s : MatchKeeper.getInstance().getAllRuleDescriptions()) {
             System.out.println(s);
         }
+
+        JDBCDeserialize.ClearAndInsertIntoDBs();
     }
+
+
 
     public static void printIntegerToSql(PrintWriter sqlInsert, Integer item, String delimiter) {
         if(item != null)
