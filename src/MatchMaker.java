@@ -80,7 +80,8 @@ public class MatchMaker
         File MastersFile = new File(OutputDirectory+"Masters_Katzenjammers.txt");
         File InsertMastersFile = new File(OutputDirectory+"InsertMasters.sql");
         File CrosswalkFile = new File(OutputDirectory+"Crosswalk_Katzenjammers.txt");
-        FileWriter mastersWriter, crosswalkWriter, insertMasterWriter;
+        File InsertCrosswalkFile = new File(OutputDirectory+"InsertCrosswalk.sql");
+        FileWriter mastersWriter, crosswalkWriter, insertMasterWriter, insertCrosswalkWriter;
         try {
             mastersWriter = new FileWriter(MastersFile, false);
             PrintWriter pw = new PrintWriter(mastersWriter);
@@ -90,7 +91,30 @@ public class MatchMaker
 
             printMastersColumns(pw);
 
+            String[] names;
+
             for(Master m : masterList) {
+
+                names = m.firstName.split("\\s+");
+                if(names.length == 2) {
+                    if(names[0] != null && names[1] != null) {
+                        m.firstName = names[0];
+                        m.lastName = names[1];
+                    }
+
+                }
+                else {
+                    if (names.length > 0 && names[0] != null) {
+                        m.firstName = names[0];
+                    }
+                    if (names.length > 1 && names[1] != null) {
+                        m.middleName = names[1];
+                    }
+                    if (names.length > 2 && names[2] != null) {
+                        m.lastName = names[2];
+                    }
+                }
+
                 printIntegerItem(pw, m.id, "\t");
                 printStringItem(pw, m.type, "\t");
                 printStringItem(pw, m.prefix, "\t");
@@ -105,6 +129,8 @@ public class MatchMaker
                 printStringItem(pw, m.phone, "\t");
                 printStringItem(pw, m.primarySpec, "\t");
                 printStringItem(pw, m.secondarySpec, "\n");
+
+
 
                 sqlInsert.print("INSERT INTO Master VALUES(");
                 printIntegerToSql(sqlInsert, m.id, ",");
@@ -159,15 +185,20 @@ public class MatchMaker
 
             printCrosswalkColumns(pw);
 
+            insertCrosswalkWriter = new FileWriter(InsertCrosswalkFile, false);
+            sqlInsert = new PrintWriter(insertCrosswalkWriter);
+
             Integer source_id, master_id;
 
             for (Map.Entry<Integer, Integer> entry : crosswalk.entrySet()) {
                 source_id = entry.getKey();
                 master_id = entry.getValue();
                 printCrosswalkLine(pw, master_id, source_id);
+                sqlInsert.print("INSERT INTO Crosswalk VALUES("+master_id+","+source_id+");\n");
+
                 // use key and value
             }
-
+            sqlInsert.close();
             pw.close();
 
 

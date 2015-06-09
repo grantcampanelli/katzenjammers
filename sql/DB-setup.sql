@@ -56,6 +56,16 @@ create table Master(
     FOREIGN KEY(secondary_specialty) REFERENCES Specialties(specialty_id)
 );
 
+create table Crosswalk(
+    master_id INT,
+    source_id INT
+
+);
+
+--     FOREIGN KEY(master_id) REFERENCES Master(id),
+--     FOREIGN KEY(source_id) REFERENCES Source(source_id)
+-- );
+
 -- create table Master(
 --     master_id INT PRIMARY KEY,
 --     type VARCHAR(12),
